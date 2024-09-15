@@ -1,4 +1,6 @@
+'use client';
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation'; // Use this for app directory
 
 const UserForm = () => {
     const [formData, setFormData] = useState({
@@ -13,6 +15,8 @@ const UserForm = () => {
         role: ''
     });
 
+    const router = useRouter(); // Initialize the router
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -23,9 +27,10 @@ const UserForm = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Here you would typically handle form submission,
-        // e.g., sending data to your backend or API.
         console.log('Form data submitted:', formData);
+
+        // Redirect to Patient form after submission
+        router.push('/');
     };
 
     return (
