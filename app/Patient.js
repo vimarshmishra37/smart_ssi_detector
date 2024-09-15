@@ -1,7 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 
-export default function SurgicalForm() {
+export default function Patient() {
   const [formData, setFormData] = useState({
     patientName: '',
     patientID: '',

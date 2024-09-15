@@ -2,7 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from 'react';
-import Form_data from "./Form_data";
+import UserForm from "./UserForm";
+import Patient from "./Patient";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -56,8 +57,11 @@ export default function Home() {
         </div>
         <button type="submit" style={styles.button}>Login</button>
       </form>
-     <Form_data/>
-    </div>
+      <br/>
+     <Patient/>
+     <br/>
+     <UserForm/>
+         </div>
   );
 }
 
