@@ -1,15 +1,17 @@
-'use client'
+'use client';
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from 'react';
-import UserForm from "./UserForm";
-import Patient from "./Patient";
+import { useRouter } from 'next/navigation';  // Import the router hook
+import Patient from "./Patient/page";
 
 export default function Home() {
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
   });
+
+  const router = useRouter(); // Initialize the router
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,12 +26,14 @@ export default function Home() {
     // Handle login logic here
     console.log('User ID/Gmail:', formData.userId);
     console.log('Password:', formData.password);
+
+    // After successful login, redirect to UserForm
+    router.push("/Patient");
   };
 
   return (
     <div style={styles.container}>
-      <div><Link href="/form">Home</Link></div>
-      <form onSubmit={handleSubmit} style={styles.form} method="GET" >
+      <form onSubmit={handleSubmit} style={styles.form} method="GET">
         <h2 style={styles.title}>Login</h2>
         <div style={styles.inputGroup}>
           <label style={styles.label} htmlFor="userId">User ID or Gmail</label>
@@ -55,13 +59,15 @@ export default function Home() {
             style={styles.input}
           />
         </div>
-        <button type="submit" style={styles.button}>Login</button>
+        <div className="flex flex-col gap-5">
+          <button type="submit" style={styles.button}>Login</button>
+          <Link href="/UserForm">
+            <span className="underline text-blue-700 cursor-pointer">New User? Sign Up</span>
+          </Link>
+        </div>
       </form>
       <br/>
-     <Patient/>
-     <br/>
-     <UserForm/>
-         </div>
+    </div>
   );
 }
 
