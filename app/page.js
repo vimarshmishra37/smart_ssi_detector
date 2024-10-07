@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';  // Import the router hook
-import Patient from "./Patient/page";
 
 export default function Home() {
   const [formData, setFormData] = useState({
@@ -28,7 +27,7 @@ export default function Home() {
     console.log('Password:', formData.password);
 
     // After successful login, redirect to UserForm
-    router.push("/Patient");
+    router.push("/Patient1");
   };
 
   return (
