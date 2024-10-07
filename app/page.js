@@ -60,7 +60,7 @@ export default function Home() {
         </div>
         <div className="flex flex-col gap-5">
           <button type="submit" style={styles.button}>Login</button>
-          <Link href="/UserForm">
+          <Link href="/Userform">
             <span className="underline text-blue-700 cursor-pointer">New User? Sign Up</span>
           </Link>
         </div>
