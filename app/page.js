@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';  // Import the router hook
 
+
 export default function Home() {
   const [formData, setFormData] = useState({
     userId: '',
@@ -27,7 +28,7 @@ export default function Home() {
     console.log('Password:', formData.password);
 
     // After successful login, redirect to UserForm
-    router.push("/Patient1");
+    router.push("/Dashboard");
   };
 
   return (
