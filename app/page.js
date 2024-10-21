@@ -2,72 +2,92 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';  // Import the router hook
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  const [formData, setFormData] = useState({
-    userId: '',
-    password: '',
-  });
-
-  const router = useRouter(); // Initialize the router
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
+    const [formData, setFormData] = useState({
+        userId: '',
+        password: '',
     });
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle login logic here
-    console.log('User ID/Gmail:', formData.userId);
-    console.log('Password:', formData.password);
+    const router = useRouter(); // Initialize the router
 
-    // After successful login, redirect to UserForm
-    router.push("/Patient1");
-  };
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
 
-  return (
-    <div style={styles.container}>
-      <form onSubmit={handleSubmit} style={styles.form} method="GET">
-        <h2 style={styles.title}>Login</h2>
-        <div style={styles.inputGroup}>
-          <label style={styles.label} htmlFor="userId">User ID or Gmail</label>
-          <input
-            type="text"
-            id="userId"
-            name="userId"
-            value={formData.userId}
-            onChange={handleChange}
-            required
-            style={styles.input}
-          />
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Prevent default form submission behavior
+
+        try {
+            const response = await fetch('http://localhost:3000/login',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: formData.userId,
+                    password: formData.password,
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Login successful:', data);
+                router.push("/Patient1"); // Redirect on success
+            } else {
+                const errorData = await response.json();
+                console.error('Login failed:', errorData);
+                alert(errorData.Error || 'Login failed');
+            }
+        } catch (error) {
+            console.log('Network or other error during login:', error);
+            alert('An error occurred while logging in. Please try again.');
+        }
+    };
+
+    return (
+        <div style={styles.container}>
+            <form onSubmit={handleSubmit} style={styles.form}>
+                <h2 style={styles.title}>Login</h2>
+                <div style={styles.inputGroup}>
+                    <label style={styles.label} htmlFor="userId">User ID or Gmail</label>
+                    <input
+                        type="text"
+                        id="userId"
+                        name="userId"
+                        value={formData.userId}
+                        onChange={handleChange}
+                        required
+                        style={styles.input}
+                    />
+                </div>
+                <div style={styles.inputGroup}>
+                    <label style={styles.label} htmlFor="password">Password</label>
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                        style={styles.input}
+                    />
+                </div>
+                <div className="flex flex-col gap-5">
+                    <button type="submit" style={styles.button}>Login</button>
+                    <Link href="/UserForm">
+                        <span className="underline text-blue-700 cursor-pointer">New User? Sign Up</span>
+                    </Link>
+                </div>
+            </form>
+            <br />
         </div>
-        <div style={styles.inputGroup}>
-          <label style={styles.label} htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={styles.input}
-          />
-        </div>
-        <div className="flex flex-col gap-5">
-          <button type="submit" style={styles.button}>Login</button>
-          <Link href="/UserForm">
-            <span className="underline text-blue-700 cursor-pointer">New User? Sign Up</span>
-          </Link>
-        </div>
-      </form>
-      <br/>
-    </div>
-  );
+    );
 }
 
 const styles = {

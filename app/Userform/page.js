@@ -34,7 +34,7 @@ const UserForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
+        <form onSubmit={handleSubmit} action='localhost:3000/register' method="POST" className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
             <h2 className="text-2xl font-bold mb-6">User Form</h2>
             <div className="mb-4">
                 <label className="block text-gray-700 font-medium mb-2">Name:</label>
