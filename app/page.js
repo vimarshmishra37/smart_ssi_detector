@@ -39,7 +39,7 @@ export default function Home() {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Login successful:', data);
-                router.push("/Patient1"); // Redirect on success
+                router.push("/Dashboard"); // Redirect on success
             } else {
                 console.log('Login failed');
                 const errorData = await response.json();
