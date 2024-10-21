@@ -25,12 +25,35 @@ const UserForm = () => {
         });
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Form data submitted:', formData);
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
 
-        // Redirect to Patient form after submission
-        router.push('/Patient1');
+        try {
+            const response = await fetch('http://localhost:3000/register',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email: formData.userId,
+                    password: formData.password,
+                }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log('Login successful:', data);
+                router.push("/Patient1"); // Redirect on success
+            } else {
+                console.log('Login failed');
+                const errorData = await response.json();
+                console.error('Login failed:', errorData);
+                alert(errorData.Error || 'Login failed');
+            }
+        } catch (error) {
+            console.log('Network or other error during login:', error);
+            alert('An error occurred while logging in. Please try again.');
+        }
     };
 
     return (
