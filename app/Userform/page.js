@@ -15,8 +15,7 @@ const UserForm = () => {
         role: ''
     });
 
-    const router = useRouter(); // Initialize the router
-
+    const router = useRouter(); 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -29,14 +28,21 @@ const UserForm = () => {
         e.preventDefault(); 
 
         try {
-            const response = await fetch('http://localhost:3000/register',{
+            const response = await fetch('http://localhost:3000/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    email: formData.userId,
-                    password: formData.password,
+                    name: formData.name,      
+                    email: formData.email,      
+                    password: formData.password, 
+                    age: formData.age,         
+                    gender: formData.gender,    
+                    dob: formData.dob,          
+                    address: formData.address, 
+                    phone: formData.phone,      
+                    role: formData.role        
                 }),
             });
 
