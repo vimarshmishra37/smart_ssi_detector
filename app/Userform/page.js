@@ -30,7 +30,7 @@ const UserForm = () => {
         console.log('Form data submitted:', formData);
 
         // Redirect to Patient form after submission
-        router.push('/');
+        router.push('/Patient1');
     };
 
     return (

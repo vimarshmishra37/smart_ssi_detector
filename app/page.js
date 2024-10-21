@@ -22,7 +22,7 @@ export default function Home() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form submission behavior
+        e.preventDefault(); 
 
         try {
             const response = await fetch('http://localhost:3000/login',{
@@ -41,6 +41,7 @@ export default function Home() {
                 console.log('Login successful:', data);
                 router.push("/Patient1"); // Redirect on success
             } else {
+                console.log('Login failed');
                 const errorData = await response.json();
                 console.error('Login failed:', errorData);
                 alert(errorData.Error || 'Login failed');
@@ -53,7 +54,7 @@ export default function Home() {
 
     return (
         <div style={styles.container}>
-            <form onSubmit={handleSubmit} style={styles.form}>
+            <form method="POST" action="localhost:3000/login" onSubmit={handleSubmit} style={styles.form}>
                 <h2 style={styles.title}>Login</h2>
                 <div style={styles.inputGroup}>
                     <label style={styles.label} htmlFor="userId">User ID or Gmail</label>
