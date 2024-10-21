@@ -70,6 +70,7 @@ const antibiotics = [
     e.preventDefault();
     console.log('Form Data Submitted:', formData);
     // Handle further processing like sending to backend here
+    router.push("/LabReport");
   };
 
   return (
