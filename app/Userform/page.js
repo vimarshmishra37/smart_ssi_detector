@@ -28,7 +28,7 @@ const UserForm = () => {
         e.preventDefault(); 
 
         try {
-            const response = await fetch('http://localhost:3000/register', {
+            const response = await fetch('https://astroplasty.onrender.com/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -48,14 +48,15 @@ const UserForm = () => {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log('Login successful:', data);
-                router.push("/Patient1"); // Redirect on success
+                console.log('Registration successful:', data);  // Corrected log message
+                router.push("/Patient1");
             } else {
-                console.log('Login failed');
+                console.log('Registration failed');
                 const errorData = await response.json();
-                console.error('Login failed:', errorData);
-                alert(errorData.Error || 'Login failed');
+                console.error('Error details:', errorData); // Improved log message
+                alert(errorData.Error || 'Registration failed');
             }
+            
         } catch (error) {
             console.log('Network or other error during login:', error);
             alert('An error occurred while logging in. Please try again.');
@@ -63,7 +64,7 @@ const UserForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} action='localhost:3000/register' method="POST" className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
+        <form onSubmit={handleSubmit} action='https://astroplasty.onrender.com/register' method="POST" className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
             <h2 className="text-2xl font-bold mb-6">User Form</h2>
             <div className="mb-4">
                 <label className="block text-gray-700 font-medium mb-2">Name:</label>
