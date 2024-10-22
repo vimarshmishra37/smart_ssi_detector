@@ -155,15 +155,53 @@ export default function Patient() {
       [name]: value,
     });
   };
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    router.push("/Patient2");
-  };
+    try {
+      const response = await fetch('http://localhost:3000/general', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            name: formData.patientName,
+            patient_id: formData.patientID,
+            age: formData.age,
+            gender: formData.gender,
+            admission_date: formData.dateOfAdmission,
+            discharge_date: formData.dateOfDischarge,
+            admittingDepartment: formData.admittingDepartment,
+            procedure_name: formData.procedureName,
+            surgeon: formData.surgeon, 
+            theatre: formData.theatre, 
+            wound_class: formData.woundClass,
+            pap_given: formData.papGiven,
+            antibiotics_given: formData.antibioticsGiven,
+            ssi_event_occurred: formData.ssiEventOccurred,
+            event_date: formData.eventDate,
+            duration_of_pap: formData.durationOfPAP,
+        }),
+    });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Login successful:', data);
+            router.push("/Patient2");// Redirect on success
+        } else {
+            console.log('Login failed');
+            const errorData = await response.json();
+            console.error('Login failed:', errorData);
+            alert(errorData.Error || 'Login failed');
+        }
+    } catch (error) {
+        console.log('Network or other error during login is working is :', error);
+        alert('An error occurred while logging in. Please try againwjehcbiqwu.');
+    }
+};
 
   return (
-    <form onSubmit={handleSubmit} className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
+    <form onSubmit={handleSubmit} action='http://localhost:3000/general' method='POST' className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-center mb-6">Surgical Site Infection Surveillance Form</h2>
 
       <div className="mb-4">

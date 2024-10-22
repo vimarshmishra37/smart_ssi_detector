@@ -58,7 +58,7 @@ const UserForm = () => {
             }
             
         } catch (error) {
-            console.log('Network or other error during login:', error);
+            console.log('Network or other error during login :', error);
             alert('An error occurred while logging in. Please try again.');
         }
     };
