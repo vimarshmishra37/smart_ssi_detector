@@ -25,7 +25,8 @@ export default function Home() {
         e.preventDefault(); 
 
         try {
-            const response = await fetch('https://astroplasty.onrender.com/login',{
+            const response = await fetch('http://localhost:3000/login',{
+               
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,7 +55,7 @@ export default function Home() {
 
     return (
         <div style={styles.container}>
-            <form method="POST" action="https://astroplasty.onrender.com/login" onSubmit={handleSubmit} style={styles.form}>
+            <form method="POST" action="https://localhost:3000/login" onSubmit={handleSubmit} style={styles.form}>
                 <h2 style={styles.title}>Login</h2>
                 <div style={styles.inputGroup}>
                     <label style={styles.label} htmlFor="userId">User ID or Gmail</label>

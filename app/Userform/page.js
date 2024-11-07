@@ -28,7 +28,7 @@ const UserForm = () => {
         e.preventDefault(); 
 
         try {
-            const response = await fetch('https://astroplasty.onrender.com/register', {
+            const response = await fetch('https://localhost:3000/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -64,7 +64,7 @@ const UserForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} action='https://astroplasty.onrender.com/register' method="POST" className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
+        <form onSubmit={handleSubmit} action='https://localhost:3000/register' method="POST" className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
             <h2 className="text-2xl font-bold mb-6">User Form</h2>
             <div className="mb-4">
                 <label className="block text-gray-700 font-medium mb-2">Name:</label>

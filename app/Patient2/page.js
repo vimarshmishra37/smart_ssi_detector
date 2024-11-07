@@ -1,74 +1,48 @@
-'use client'
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+'use client';
+import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function Page() {
-  // Initial form data state for antibiotics
+  const searchParams = useSearchParams();
+  const patientId = searchParams.get('patientID'); // Retrieve patientID from URL
+
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     organism1: '',
     organism2: '',
     isolate1: [{ sensitive: '', resistant: '', intermediate: '' }],
     isolate2: [{ sensitive: '', resistant: '', intermediate: '' }],
+    patientId: patientId || '', // Initialize patientId in formData
   });
 
+  // Update formData when patientId is available
+  useEffect(() => {
+    if (patientId) {
+      setFormData((prevData) => ({ ...prevData, patientId }));
+    }
+  }, [patientId]);
+
+  // The rest of your component code follows...
   const microorganisms = [
-    "E.COLI",
-    "KLEBSIELLA PNEUMONIAE",
-    "ENTEROCOCCUS FAECIUM",
-    "ENTEROCOCCUS FAECALIS",
-    "STAPHYLOCOCCUS HAEMOLYTICUS",
-    "SKIN COMMENSAL FLORA",
-    "PSEUDOMONAS AERUGINOSA",
-    "STAPHYLOCOCCUS AUREUS (MRSA)",
-    "STAPHYLOCOCCUS AUREUS (MSSA)",
-    "CONS",
-    "ACINETOBACTER BAUMANII",
-    "CITROBACTER KOSERI",
-    "CITROBACTER FREUNDII",
-    "ENTEROBACTER CLOACAE",
-    "ENTEROBACTER AEROGENES",
-    "PROTEUS MIRABILIS",
-    "MORGANELLA MORGANII",
-    "Others"
-  ];
-  // List of antibiotic options
-  const antibiotics = [
-    "Amoxicillin-clavulanic acid",
-    "Amikacin",
-    "Aztreonam",
-    "Cefepime",
-    "Ceftazidime",
-    "Ceftriaxone",
-    "Netilmicin",
-    "Meropenem",
-    "Imipenem",
-    "Levofloxacin",
-    "Norfloxacin",
-    "Ciprofloxacin",
-    "Cefoperazone/Sulbactum",
-    "Ticarcillin/Clavulanic acid",
-    "Piperacillin-tazobactum",
-    "Ceftazidime/Avibactam",
-    "Penicillin",
-    "Oxacillin",
-    "Gentamicin",
-    "Tetracycline",
-    "Clindamycin",
-    "Vancomycin E STRIP",
-    "Linezolid",
-    "Teicoplanin",
-    "Nitrofurantoin",
-    "Erythromycin",
-    "Cefoxitin",
-    "Co-trimoxazole",
-    "Netilmicin",
-    "Ertapenem",
-    "Chloramphenicol",
-    "Fosfomycin",
-    "Colistin E STRIP"
+    "E.COLI", "KLEBSIELLA PNEUMONIAE", "ENTEROCOCCUS FAECIUM",
+    "ENTEROCOCCUS FAECALIS", "STAPHYLOCOCCUS HAEMOLYTICUS",
+    "SKIN COMMENSAL FLORA", "PSEUDOMONAS AERUGINOSA", "STAPHYLOCOCCUS AUREUS (MRSA)",
+    "STAPHYLOCOCCUS AUREUS (MSSA)", "CONS", "ACINETOBACTER BAUMANII", "CITROBACTER KOSERI",
+    "CITROBACTER FREUNDII", "ENTEROBACTER CLOACAE", "ENTEROBACTER AEROGENES", "PROTEUS MIRABILIS",
+    "MORGANELLA MORGANII", "Others"
   ];
 
-  // Handle form changes
+  const antibiotics = [
+    "Amoxicillin-clavulanic acid", "Amikacin", "Aztreonam", "Cefepime", "Ceftazidime",
+    "Ceftriaxone", "Netilmicin", "Meropenem", "Imipenem", "Levofloxacin", "Norfloxacin",
+    "Ciprofloxacin", "Cefoperazone/Sulbactum", "Ticarcillin/Clavulanic acid", "Piperacillin-tazobactum",
+    "Ceftazidime/Avibactam", "Penicillin", "Oxacillin", "Gentamicin", "Tetracycline", "Clindamycin",
+    "Vancomycin E STRIP", "Linezolid", "Teicoplanin", "Nitrofurantoin", "Erythromycin", "Cefoxitin",
+    "Co-trimoxazole", "Ertapenem", "Chloramphenicol", "Fosfomycin", "Colistin E STRIP"
+];
+
+
   const handleChange = (e, index, isolate) => {
     const { name, value } = e.target;
     const newIsolate = [...formData[isolate]];
@@ -78,8 +52,7 @@ export default function Page() {
       [isolate]: newIsolate,
     });
   };
-  const router = useRouter();
-  // Add new row for the specified isolate
+
   const addRow = (isolate) => {
     setFormData({
       ...formData,
@@ -87,8 +60,8 @@ export default function Page() {
     });
   };
 
-  // Remove row from the specified isolate
   const removeRow = (isolate, index) => {
+    console.log('Patient_id', patientId);
     const newIsolate = formData[isolate].filter((_, i) => i !== index);
     setFormData({
       ...formData,
@@ -96,15 +69,35 @@ export default function Page() {
     });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  /*const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    router.push("/Patient3");
-  };
+  
+    try {
+      const response = await fetch('http://localhost:3000/antibiotic', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      if (response.ok) {
+        console.log('Form data submitted successfully');
+        router.push("/Patient3"); // Redirect after successful submission
+      } else {
+        console.error('Failed to submit form data');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
+  };*/
+  const handleSubmit = async (e) => {
+        router.push("/Patient3"); 
+    }
 
   return (
     <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
+
       <h1 className="text-2xl font-bold mb-4">Antibiotic Susceptibility Form</h1>
 
       <form onSubmit={handleSubmit}>

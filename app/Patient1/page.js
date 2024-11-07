@@ -187,7 +187,7 @@ export default function Patient() {
         if (response.ok) {
             const data = await response.json();
             console.log('Login successful:', data);
-            router.push("/Patient2");// Redirect on success
+            router.push(`/Patient2?patientID=${formData.patientID}`);
         } else {
             console.log('Login failed');
             const errorData = await response.json();
