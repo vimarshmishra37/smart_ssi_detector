@@ -92,8 +92,10 @@ export default function Page() {
     }
   };*/
   const handleSubmit = async (e) => {
-        router.push("/Patient3"); 
-    }
+    e.preventDefault();
+    router.push("/Patient3"); 
+  };
+  
 
   return (
     <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
