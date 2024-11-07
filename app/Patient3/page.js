@@ -1,4 +1,5 @@
 'use client';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 export default function AntibioticSurveillanceForm() {
@@ -8,6 +9,8 @@ export default function AntibioticSurveillanceForm() {
     postAntibiotics: [{ name: '', route: '', duration: '', doses: '' }],
     times: { induction: '', incision: '', surgeryEnd: '' },
   });
+
+  const router = useRouter(); 
 
   // Antibiotic options for dropdown
   const antibiotics = [
@@ -356,3 +359,5 @@ export default function AntibioticSurveillanceForm() {
     </div>
   );
 }
+
+
