@@ -10,43 +10,43 @@ export default function AntibioticSurveillanceForm() {
   });
 
   // Antibiotic options for dropdown
-const antibiotics = [
-  "Amoxicillin-clavulanic acid",
-  "Amikacin",
-  "Aztreonam",
-  "Cefepime",
-  "Ceftazidime",
-  "Ceftriaxone",
-  "Netilmicin",
-  "Meropenem",
-  "Imipenem",
-  "Levofloxacin",
-  "Norfloxacin",
-  "Ciprofloxacin",
-  "Cefoperazone/Sulbactum",
-  "Ticarcillin/Clavulanic acid",
-  "Piperacillin-tazobactum",
-  "Ceftazidime/Avibactam",
-  "Penicillin",
-  "Oxacillin",
-  "Gentamicin",
-  "Tetracycline",
-  "Clindamycin",
-  "Vancomycin E STRIP",
-  "Linezolid",
-  "Teicoplanin",
-  "Nitrofurantoin",
-  "Erythromycin",
-  "Cefoxitin",
-  "Co-trimoxazole",
-  "Netilmicin",
-  "Ertapenem",
-  "Chloramphenicol",
-  "Fosfomycin",
-  "Colistin E STRIP"
-];
+  const antibiotics = [
+    "Amoxicillin-clavulanic acid",
+    "Amikacin",
+    "Aztreonam",
+    "Cefepime",
+    "Ceftazidime",
+    "Ceftriaxone",
+    "Netilmicin",
+    "Meropenem",
+    "Imipenem",
+    "Levofloxacin",
+    "Norfloxacin",
+    "Ciprofloxacin",
+    "Cefoperazone/Sulbactum",
+    "Ticarcillin/Clavulanic acid",
+    "Piperacillin-tazobactum",
+    "Ceftazidime/Avibactam",
+    "Penicillin",
+    "Oxacillin",
+    "Gentamicin",
+    "Tetracycline",
+    "Clindamycin",
+    "Vancomycin E STRIP",
+    "Linezolid",
+    "Teicoplanin",
+    "Nitrofurantoin",
+    "Erythromycin",
+    "Cefoxitin",
+    "Co-trimoxazole",
+    "Netilmicin",
+    "Ertapenem",
+    "Chloramphenicol",
+    "Fosfomycin",
+    "Colistin E STRIP"
+  ];
 
-  const routes=["I/V","I/M","S/C","I/D","P/O","LOCAL APPLICATION","SUB LINGUAL"];
+  const routes = ["I/V", "I/M", "S/C", "I/D", "P/O", "LOCAL APPLICATION", "SUB LINGUAL"];
   const doses = ['1', '2', '3', '4', '5'];
 
   // Handle form input changes
@@ -121,13 +121,13 @@ const antibiotics = [
                   </td>
                   <td className="border border-gray-300 p-2">
                     <input
-                    type="text"
-                    name="duration"
-                    placeholder="Duration"
-                    value={row.duration}
-                    onChange={(e) => handleChange(e, index, 'priorAntibiotics')}
-                     className="w-full border border-gray-300 rounded-md p-2"
-                  />
+                      type="text"
+                      name="duration"
+                      placeholder="Duration"
+                      value={row.duration}
+                      onChange={(e) => handleChange(e, index, 'priorAntibiotics')}
+                      className="w-full border border-gray-300 rounded-md p-2"
+                    />
                   </td>
                   <td className="border border-gray-300 p-2">
                     <select
@@ -198,13 +198,13 @@ const antibiotics = [
                   </td>
                   <td className="border border-gray-300 p-2">
                     <input
-                    type="text"
-                    name="duration"
-                    placeholder="Duration"
-                    value={row.duration}
-                    onChange={(e) => handleChange(e, index, 'priorAntibiotics')}
-                    className="border p-2 rounded"
-                  />
+                      type="text"
+                      name="duration"
+                      placeholder="Duration"
+                      value={row.duration}
+                      onChange={(e) => handleChange(e, index, 'prePeriAntibiotics')}
+                      className="w-full border border-gray-300 rounded-md p-2"
+                    />
                   </td>
                   <td className="border border-gray-300 p-2">
                     <select
@@ -228,13 +228,13 @@ const antibiotics = [
             onClick={() => addRow('prePeriAntibiotics')}
             className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
           >
-            Add Row for Pre/Peri-operatively
+            Add Row for Pre/Perioperatively Antibiotics
           </button>
         </div>
 
-        {/* Antibiotics after Post-operation */}
+        {/* Antibiotics Post-operatively */}
         <div className="mb-6">
-          <h2 className="text-lg font-semibold mb-2">Antibiotics given after Peri-operative</h2>
+          <h2 className="text-lg font-semibold mb-2">Antibiotics given Post-operatively</h2>
           <table className="min-w-full table-auto border-collapse border border-gray-300">
             <thead>
               <tr className="bg-gray-100">
@@ -275,13 +275,13 @@ const antibiotics = [
                   </td>
                   <td className="border border-gray-300 p-2">
                     <input
-                    type="text"
-                    name="duration"
-                    placeholder="Duration"
-                    value={row.duration}
-                    onChange={(e) => handleChange(e, index, 'priorAntibiotics')}
-                     className="w-full border border-gray-300 rounded-md p-2"
-                  />
+                      type="text"
+                      name="duration"
+                      placeholder="Duration"
+                      value={row.duration}
+                      onChange={(e) => handleChange(e, index, 'postAntibiotics')}
+                      className="w-full border border-gray-300 rounded-md p-2"
+                    />
                   </td>
                   <td className="border border-gray-300 p-2">
                     <select
@@ -305,10 +305,9 @@ const antibiotics = [
             onClick={() => addRow('postAntibiotics')}
             className="mt-2 bg-green-500 text-white px-4 py-2 rounded"
           >
-            Add Row for Post-operation Antibiotics
+            Add Row for Post-operatively Antibiotics
           </button>
         </div>
-
         {/* Time Fields */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold mb-2">Time Fields</h2>
