@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import html2pdf from 'html2pdf.js';
 
 export default function Patient() {
   const [formData, setFormData] = useState({
@@ -145,7 +146,6 @@ export default function Patient() {
     "Deepshikha", "Meenakshi", "Arti Yadav", "Anjali Gupta", "Rajesh Prasad Gupta", "Abhay Kumar Singh", "Raman Mehta",
     "Abhishek Dave", "Preeti Deolwari", "Abhijeet Kotabagi", "Chandrika", "Parineeta Maria", "Soma Singh", "Rakhi Gupta"
   ];
-
   const router = useRouter();
 
   const handleChange = (e) => {
@@ -155,6 +155,20 @@ export default function Patient() {
       [name]: value,
     });
   };
+
+  const handleDownloadPDF = () => {
+    const element = document.getElementById('pdfContent');
+    html2pdf()
+      .set({
+        margin: 1,
+        filename: `Patient_Form_${formData.patientName || 'Unnamed'}.pdf`,
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+      })
+      .from(element)
+      .save();
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault(); 
 
@@ -201,28 +215,30 @@ export default function Patient() {
 };
 
   return (
-    <form onSubmit={handleSubmit} action='http://localhost:3000/general' method='POST' className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
-      <h2 className="text-xl font-semibold text-center mb-6">Surgical Site Infection Surveillance Form</h2>
+    <>
+      <form onSubmit={handleSubmit} className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
+        <div id="pdfContent">
+          <h2 className="text-xl font-semibold text-center mb-6">Surgical Site Infection Surveillance Form</h2>
+          
+          <div className="mb-4">
+            <label htmlFor="patientName" className="block text-gray-700 font-semibold mb-2">Patient Name:</label>
+            <input type="text" id="patientName" name="patientName" value={formData.patientName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
+          </div>
 
-      <div className="mb-4">
-        <label htmlFor="patientName" className="block text-gray-700 font-semibold mb-2">Patient Name:</label>
-        <input type="text" id="patientName" name="patientName" value={formData.patientName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
-      </div>
+          <div className="flex justify-between mb-4">
+            <div className="w-1/2 pr-2">
+              <label htmlFor="patientID" className="block text-gray-700 font-semibold mb-2">Patient ID:</label>
+              <input type="text" id="patientID" name="patientID" value={formData.patientID} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
+            </div>
+            <div className="w-1/2 pl-2">
+              <label htmlFor="age" className="block text-gray-700 font-semibold mb-2">Age:</label>
+              <input type="text" id="age" name="age" value={formData.age} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
+            </div>
+          </div>
 
-      <div className="flex justify-between mb-4">
-        <div className="w-1/2 pr-2">
-          <label htmlFor="patientID" className="block text-gray-700 font-semibold mb-2">Patient ID:</label>
-          <input type="text" id="patientID" name="patientID" value={formData.patientID} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
-        </div>
-        <div className="w-1/2 pl-2">
-          <label htmlFor="age" className="block text-gray-700 font-semibold mb-2">Age:</label>
-          <input type="text" id="age" name="age" value={formData.age} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
-        </div>
-      </div>
-
-      <div className="mb-4">
+          <div className="mb-4">
         <label htmlFor="gender" className="block text-gray-700 font-semibold mb-2">Gender:</label>
-        <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2">
+        <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12">
           <option value="">-- Select Gender --</option>
           <option value="male">Male</option>
           <option value="female">Female</option>
@@ -233,17 +249,17 @@ export default function Patient() {
       <div className="flex justify-between mb-4">
         <div className="w-1/2 pr-2">
           <label htmlFor="dateOfAdmission" className="block text-gray-700 font-semibold mb-2">Date of Admission:</label>
-          <input type="date" id="dateOfAdmission" name="dateOfAdmission" value={formData.dateOfAdmission} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
+          <input type="date" id="dateOfAdmission" name="dateOfAdmission" value={formData.dateOfAdmission} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
         </div>
         <div className="w-1/2 pl-2">
           <label htmlFor="dateOfProcedure" className="block text-gray-700 font-semibold mb-2">Date of Procedure:</label>
-          <input type="date" id="dateOfProcedure" name="dateOfProcedure" value={formData.dateOfProcedure} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
+          <input type="date" id="dateOfProcedure" name="dateOfProcedure" value={formData.dateOfProcedure} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 mb-2" />
         </div>
       </div>
 
       <div className="mb-4">
         <label htmlFor="admittingDepartment" className="block text-gray-700 font-semibold mb-2">Admitting Department:</label>
-        <select id="admittingDepartment" name="admittingDepartment" value={formData.admittingDepartment} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2">
+        <select id="admittingDepartment" name="admittingDepartment" value={formData.admittingDepartment} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12">
           <option value="">-- Select Department --</option>
           {departments.map((dept, index) => (
             <option key={index} value={dept}>{dept}</option>
@@ -253,7 +269,7 @@ export default function Patient() {
 
       <div className="mb-4">
         <label htmlFor="procedureName" className="block text-gray-700 font-semibold mb-2">Procedure Name:</label>
-        <select id="procedureName" name="procedureName" value={formData.procedureName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2">
+        <select id="procedureName" name="procedureName" value={formData.procedureName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 mb-2">
           <option value="">-- Select Procedure --</option>
           {procedures.map((procedure, index) => (
             <option key={index} value={procedure}>{procedure}</option>
@@ -263,7 +279,7 @@ export default function Patient() {
 
       <div className="mb-4">
         <label htmlFor="surgeon" className="block text-gray-700 font-semibold mb-2">Procedure Done By (Primary Surgeon):</label>
-        <select id="surgeon" name="surgeon" value={formData.surgeon} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2">
+        <select id="surgeon" name="surgeon" value={formData.surgeon} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 mb-2">
           <option value="">-- Select Surgeon --</option>
           {surgeons.map((surgeon, index) => (
             <option key={index} value={surgeon}>{surgeon}</option>
@@ -273,7 +289,7 @@ export default function Patient() {
 
       <div className="mb-4">
         <label htmlFor="theatre" className="block text-gray-700 font-semibold mb-2">Operation Theatre:</label>
-        <select id="theatre" name="theatre" value={formData.theatre} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2">
+        <select id="theatre" name="theatre" value={formData.theatre} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 mb-2">
           <option value="">-- Select Theatre --</option>
           {operationTheatres.map((theatre, index) => (
             <option key={index} value={theatre}>{theatre}</option>
@@ -336,7 +352,7 @@ export default function Patient() {
             name="eventDate"
             value={formData.eventDate}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2"
+            className="w-full border border-gray-300 rounded-md p-2 h-12"
           />
         </div>
       )}
@@ -356,16 +372,22 @@ export default function Patient() {
         <div className="mb-4">
           <div className="mb-2">
             <label htmlFor="antibioticsGiven" className="block text-gray-700 font-semibold mb-2">If Yes, Antibiotics Given:</label>
-            <input type="text" id="antibioticsGiven" name="antibioticsGiven" value={formData.antibioticsGiven} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
+            <input type="text" id="antibioticsGiven" name="antibioticsGiven" value={formData.antibioticsGiven} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
           </div>
           <div>
             <label htmlFor="durationOfPAP" className="block text-gray-700 font-semibold mb-2">Duration of PAP:</label>
-            <input type="text" id="durationOfPAP" name="durationOfPAP" value={formData.durationOfPAP} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2" />
+            <input type="text" id="durationOfPAP" name="durationOfPAP" value={formData.durationOfPAP} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
           </div>
         </div>
       )}
 
-      <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Next</button>
-    </form>
+        </div>
+
+        <div className="mt-6 flex justify-between">
+          <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">Next</button>
+          <button type="button" onClick={handleDownloadPDF} className="px-4 py-2 bg-green-500 text-white rounded-md">Download as PDF</button>
+        </div>
+      </form>
+    </>
   );
 }
