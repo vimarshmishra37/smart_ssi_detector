@@ -226,13 +226,13 @@ export default function Patient() {
             <input type="text" id="patientName" name="patientName" value={formData.patientName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
           </div>
 
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4"> 
             {/* <div className="w-1/2 pr-2">
               <label htmlFor="patientID" className="block text-gray-700 font-semibold mb-2">Patient ID:</label>
               <input type="text" id="patientID" name="patientID" value={formData.patientID} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
             </div> */}
             <div className="w-1/2 pr-2">
-              <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email:</label>
+              <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email Id:</label>
               <input type="email" id="emil" name="email" value={formData.email} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
             </div>
             <div className="w-1/2 pl-2">
