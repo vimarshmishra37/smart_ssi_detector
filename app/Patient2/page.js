@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-
+import { Suspense } from 'react';
 export default function Page() {
   const searchParams = useSearchParams();
   const patientId = searchParams.get('patientID'); // Retrieve patientID from URL
@@ -98,6 +98,7 @@ export default function Page() {
   
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
 
       <h1 className="text-2xl font-bold mb-4">Antibiotic Susceptibility Form</h1>
@@ -315,5 +316,6 @@ export default function Page() {
         </div>
       </form>
     </div>
+    </Suspense>
   );
 }
