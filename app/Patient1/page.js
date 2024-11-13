@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import html2pdf from 'html2pdf.js';
-
+import { Suspense } from 'react';
 export default function Patient() {
   const [formData, setFormData] = useState({
     patientName: '',
@@ -216,6 +216,7 @@ export default function Patient() {
 };
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <>
       <form onSubmit={handleSubmit} className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
         <div id="pdfContent">
@@ -393,6 +394,8 @@ export default function Patient() {
           <button type="button" onClick={handleDownloadPDF} className="px-4 py-2 bg-green-500 text-white rounded-md">Download as PDF</button>
         </div>
       </form>
+      
     </>
+        </Suspense>
   );
 }

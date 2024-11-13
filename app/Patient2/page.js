@@ -306,7 +306,7 @@ export default function Page() {
             type="button"
             className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
           >
-            Add Row for Isolate 2
+            Add Row for Isolate  2
           </button>
         </div>
 
