@@ -1,7 +1,8 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense } from 'react';
+
+
 export default function Page() {
   const searchParams = useSearchParams();
   const patientId = searchParams.get('patientID'); // Retrieve patientID from URL
@@ -23,7 +24,6 @@ export default function Page() {
     }
   }, [patientId]);
 
-  // The rest of your component code follows...
   const microorganisms = [
     "E.COLI", "KLEBSIELLA PNEUMONIAE", "ENTEROCOCCUS FAECIUM",
     "ENTEROCOCCUS FAECALIS", "STAPHYLOCOCCUS HAEMOLYTICUS",
@@ -40,8 +40,7 @@ export default function Page() {
     "Ceftazidime/Avibactam", "Penicillin", "Oxacillin", "Gentamicin", "Tetracycline", "Clindamycin",
     "Vancomycin E STRIP", "Linezolid", "Teicoplanin", "Nitrofurantoin", "Erythromycin", "Cefoxitin",
     "Co-trimoxazole", "Ertapenem", "Chloramphenicol", "Fosfomycin", "Colistin E STRIP"
-];
-
+  ];
 
   const handleChange = (e, index, isolate) => {
     const { name, value } = e.target;
@@ -61,7 +60,6 @@ export default function Page() {
   };
 
   const removeRow = (isolate, index) => {
-    console.log('Patient_id', patientId);
     const newIsolate = formData[isolate].filter((_, i) => i !== index);
     setFormData({
       ...formData,
@@ -69,33 +67,30 @@ export default function Page() {
     });
   };
 
-  /*const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await fetch('http://localhost:3000/antibiotic', {
-        method: 'POST',
+        method: 'POST', // or 'PUT' if updating
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
-  
+
       if (response.ok) {
-        console.log('Form data submitted successfully');
-        router.push("/Patient3"); // Redirect after successful submission
+        const data = await response.json();
+        console.log("Data submitted successfully:", data);
+        router.push(`/Patient3?patientID=${patientId}`);
       } else {
         console.error('Failed to submit form data');
       }
     } catch (error) {
       console.error('Error submitting form:', error);
     }
-  };*/
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    router.push("/Patient3"); 
   };
-  
+
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -103,7 +98,7 @@ export default function Page() {
 
       <h1 className="text-2xl font-bold mb-4">Antibiotic Susceptibility Form</h1>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} method='POST' action='http://localhost:3000/antibiotic' >
         {/* Micro-organisms Section */}
         <div className="mb-4">
           <h2 className="text-lg font-semibold mb-2">Micro-organisms:</h2>

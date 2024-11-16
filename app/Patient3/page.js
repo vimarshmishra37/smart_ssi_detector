@@ -1,8 +1,10 @@
 'use client';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useState, useEffect ,Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function AntibioticSurveillanceForm() {
+  const searchParams = useSearchParams();
+  const patientId = searchParams.get('patientID'); 
   const [formData, setFormData] = useState({
     priorAntibiotics: [{ name: '', route: '', duration: '', doses: '' }],
     prePeriAntibiotics: [{ name: '', route: '', duration: '', doses: '' }],
@@ -14,43 +16,22 @@ export default function AntibioticSurveillanceForm() {
 
   // Antibiotic options for dropdown
   const antibiotics = [
-    "Amoxicillin-clavulanic acid",
-    "Amikacin",
-    "Aztreonam",
-    "Cefepime",
-    "Ceftazidime",
-    "Ceftriaxone",
-    "Netilmicin",
-    "Meropenem",
-    "Imipenem",
-    "Levofloxacin",
-    "Norfloxacin",
-    "Ciprofloxacin",
-    "Cefoperazone/Sulbactum",
-    "Ticarcillin/Clavulanic acid",
-    "Piperacillin-tazobactum",
-    "Ceftazidime/Avibactam",
-    "Penicillin",
-    "Oxacillin",
-    "Gentamicin",
-    "Tetracycline",
-    "Clindamycin",
-    "Vancomycin E STRIP",
-    "Linezolid",
-    "Teicoplanin",
-    "Nitrofurantoin",
-    "Erythromycin",
-    "Cefoxitin",
-    "Co-trimoxazole",
-    "Netilmicin",
-    "Ertapenem",
-    "Chloramphenicol",
-    "Fosfomycin",
-    "Colistin E STRIP"
+    "Amoxicillin-clavulanic acid", "Amikacin", "Aztreonam", "Cefepime", "Ceftazidime",
+    "Ceftriaxone", "Netilmicin", "Meropenem", "Imipenem", "Levofloxacin", "Norfloxacin", 
+    "Ciprofloxacin", "Cefoperazone/Sulbactum", "Ticarcillin/Clavulanic acid", "Piperacillin-tazobactum", 
+    "Ceftazidime/Avibactam", "Penicillin", "Oxacillin", "Gentamicin", "Tetracycline", "Clindamycin", 
+    "Vancomycin E STRIP", "Linezolid", "Teicoplanin", "Nitrofurantoin", "Erythromycin", "Cefoxitin", 
+    "Co-trimoxazole", "Netilmicin", "Ertapenem", "Chloramphenicol", "Fosfomycin", "Colistin E STRIP"
   ];
 
   const routes = ["I/V", "I/M", "S/C", "I/D", "P/O", "LOCAL APPLICATION", "SUB LINGUAL"];
   const doses = ['1', '2', '3', '4', '5'];
+ // Update formData when patientId is available
+ useEffect(() => {
+  if (patientId) {
+    setFormData((prevData) => ({ ...prevData, patientId }));
+  }
+}, [patientId]);
 
   // Handle form input changes
   const handleChange = (e, index, section) => {
@@ -68,18 +49,40 @@ export default function AntibioticSurveillanceForm() {
     });
   };
 
-  // Handle form submission (e.g., log data or send to backend)
-  const handleSubmit = (e) => {
+  // Handle form submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data Submitted:', formData);
-    // Handle further processing like sending to backend here
-    router.push("/LabReport");
+    
+    // Send formData to the backend using a POST request
+    try {
+      const response = await fetch("http://localhost:3000/patient", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+  
+      // Handle successful response
+      if (response.ok) {
+        const data = await response.json();
+        console.log("Data submitted successfully:", data);
+        router.push(`/LabReport?patientID=${patientId}`); // Redirect to Lab Report page on success
+      } else {
+        // Handle errors from the backend
+        console.error("Error submitting form:", response.statusText);
+      }
+    } catch (error) {
+      // Handle any network errors
+      console.error("Network error:", error);
+    }
   };
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-4">Antibiotic Prescription Surveillance Form</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} method='POST' action="http://localhost:3000/patient">
         
         {/* Antibiotics Prior to Operation */}
         <div className="mb-6">
@@ -357,6 +360,7 @@ export default function AntibioticSurveillanceForm() {
         </div>
       </form>
     </div>
+    </Suspense>
   );
 }
 

@@ -1,64 +1,71 @@
 'use client';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { jsPDF } from 'jspdf';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter, useSearchParams } from 'next/navigation';
+import axios from 'axios';
 
 export default function LabReportForm() {
+    const searchParams = useSearchParams();
+    const patientId = searchParams.get('patientID');
+    const router = useRouter();
+
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
-    const router = useRouter(); // Initialize the router
+
+    useEffect(() => {
+        if (patientId) {
+            axios.get(`http://localhost:3000/user/${patientId}`)
+                .then((response) => {
+                    const data = response.data.patient;
+                    console.log(data);
+                    if (data) {
+                        document.getElementById('name').innerText = data.name || '';
+                        document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
+                    document.getElementById('mrn').innerText = data.mrn || '';
+                    document.getElementById('collectedOn').innerText = data.collectedOn || '';
+                    document.getElementById('completedOn').innerText = data.completedOn || '';
+                    document.getElementById('dept').innerText = data.department || 'G1 & Hepato-Pancreatico-Biliary Surgery';
+                    document.getElementById('docname').innerText = data.doctor || 'Dr Smith Mathew';
+                    document.getElementById('visitType').innerText = data.visitType || 'IP';
+                    document.getElementById('recievedOn').innerText = data.recievedOn || '';
+                    document.getElementById('sampleNo').innerText = data.sampleNo || '';
+                    document.getElementById('testName').innerText = data.testName || 'AEROBIC C & S';
+                    document.getElementById('incubPeriod').innerText = data.incubPeriod || '36-48 hrs';
+                    document.getElementById('remarks').innerText = data.remarks || '';
+                    document.getElementById('comments').innerText = data.comments || '';
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching patient data:', error);
+                });
+        }
+    }, [patientId, setValue]);
+    
 
     const onSubmit = (data) => {
-        console.log(data);
-        // Optionally, you can handle form data here or call a backend API
+        console.log('Form submitted with:', data);
+        // Optionally, send data to the backend
     };
 
-    // Function to generate PDF
     const generatePDF = () => {
         const doc = new jsPDF();
 
-        // Add title
+        // Generate the PDF content
         doc.setFontSize(18);
         doc.text('Department of Laboratory Medicine - Microbiology', 14, 20);
 
-        // Patient Information
         doc.setFontSize(14);
         doc.text('Patient Information', 14, 30);
-        doc.text(`Name: ${document.getElementById('name').value}`, 14, 40);
-        doc.text(`Age/Sex: ${document.getElementById('ageSex').value}`, 14, 50);
-        doc.text(`MRN: ${document.getElementById('mrn').value}`, 14, 60);
-        doc.text(`Specimen Collected On: ${document.getElementById('collectedOn').value}`, 14, 70);
-        doc.text(`Specimen Completed On: ${document.getElementById('completedOn').value}`, 14, 80);
+        doc.text(`Name: ${document.getElementById('name').innerText}`, 14, 40);
+        doc.text(`Age/Sex: ${document.getElementById('ageSex').innerText}`, 14, 50);
+        doc.text(`MRN: ${document.getElementById('mrn').innerText}`, 14, 60);
 
-        // Test and Sample Information
-        doc.setFontSize(14);
-        doc.text('Test and Sample Information', 14, 100);
-        doc.text(`Test Name: ${document.getElementById('testName').value}`, 14, 110);
-        doc.text(`Incubation Period: ${document.getElementById('incubPeriod').value}`, 14, 120);
-        doc.text(`Remarks: ${document.getElementById('remarks').value}`, 14, 130);
-
-        // Antibiotic Susceptibility
-        doc.setFontSize(14);
-        doc.text('Antibiotic Susceptibility', 14, 150);
-        ['Cefuroxime', 'Ceftriaxone', 'Cefazidime', 'Cefepime', 'Amoxicillin/Clavulanic acid', 'Piperacillin/Tazobactam', 'Cefoperazone/Sulbactam', 'Gentamicin', 'Amikacin', 'Netilmicin', 'Ciprofloxacin', 'Levofloxacin', 'Trimethoprim/Sulfamethoxazole'].forEach((antibiotic, index) => {
-            doc.text(`${antibiotic}:`, 14, 160 + (index * 10));
-            doc.text(`MIC: ${document.getElementById(`mic_${antibiotic}`).value}`, 40, 160 + (index * 10));
-            doc.text(`Interpretation: ${document.getElementById(`interpretation_${antibiotic}`).value}`, 100, 160 + (index * 10));
-        });
-
-        // Comments
-        doc.setFontSize(14);
-        doc.text('Comments', 14, 270);
-        doc.text(`Comments: ${document.getElementById('comments').value}`, 14, 280);
-
-        // Save PDF
+        // Add other PDF sections as required
         doc.save('LabReport.pdf');
     };
 
-    // Function to handle submit and navigate to the dashboard
     const handleFormSubmit = () => {
-        // Redirect to dashboard page after submission
-        router.push('/Dashboard'); // Adjust the path if necessary
+        router.push('/Dashboard'); // Adjust route as necessary
     };
 
     return (
@@ -72,7 +79,7 @@ export default function LabReportForm() {
                     <tbody>
                         <tr>
                             <td className="border px-4 py-2"><span className="font-bold">Name:</span></td>
-                            <td className="border px-4 py-2"><span id="name">John Doe</span></td>
+                            <td className="border px-4 py-2"><span id="name"></span></td>
                             <td className="border px-4 py-2"><span className="font-bold">Department:</span></td>
                             <td className="border px-4 py-2"><span id="dept">G1 & Hepato-Pancreatico-Biliary Surgery</span></td>
                         </tr>
