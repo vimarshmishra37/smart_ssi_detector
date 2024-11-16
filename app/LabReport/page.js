@@ -21,11 +21,11 @@ export default function LabReportForm() {
                     if (data) {
                         document.getElementById('name').innerText = data.name || '';
                         document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
-                    document.getElementById('mrn').innerText = data.mrn || '';
+                    document.getElementById('mrn').innerText = data._id || '';
                     document.getElementById('collectedOn').innerText = data.collectedOn || '';
                     document.getElementById('completedOn').innerText = data.completedOn || '';
-                    document.getElementById('dept').innerText = data.department || 'G1 & Hepato-Pancreatico-Biliary Surgery';
-                    document.getElementById('docname').innerText = data.doctor || 'Dr Smith Mathew';
+                    document.getElementById('dept').innerText = data.admittingDepartment || 'G1 & Hepato-Pancreatico-Biliary Surgery';
+                    document.getElementById('docname').innerText = data.surgeon|| 'Dr Smith Mathew';
                     document.getElementById('visitType').innerText = data.visitType || 'IP';
                     document.getElementById('recievedOn').innerText = data.recievedOn || '';
                     document.getElementById('sampleNo').innerText = data.sampleNo || '';
