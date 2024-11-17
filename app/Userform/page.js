@@ -36,7 +36,7 @@ const UserForm = () => {
             setOtpMessage('Please enter an email to receive OTP.');
             return;
         }
-    
+
         try {
             const response = await fetch('http://localhost:3000/send-otp', {
                 method: 'POST',
@@ -45,12 +45,12 @@ const UserForm = () => {
                 },
                 body: JSON.stringify({ email: formData.email }),
             });
-    
+
             if (response.ok) {
                 const data = await response.json();
                 setOtpSent(true);
                 setOtpMessage('OTP sent successfully. Please check your email.');
-    
+
                 // Store the sent OTP for validation
                 setSentOtp(data.otp); // Assuming the backend returns the OTP
                 console.log('OTP sent successfully:', data); // Log the OTP data
@@ -79,7 +79,6 @@ const UserForm = () => {
         if (!phone) return 'Phone number is required';
         if (!/^\d{10}$/.test(phone)) return 'Phone number must be 10 digits';
         if (!role) return 'Role is required';
-        console.log(sentOtp,otp);
         if (parseInt(otp) !== parseInt(sentOtp)) return 'OTP does not match';
         return null;
     };
@@ -118,8 +117,9 @@ const UserForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-6 bg-white shadow-md rounded-md">
-            <h2 className="text-2xl font-bold mb-6">User Form</h2>
+        <div className='bg-teal-100'>
+        <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-6 bg-white shadow-sm margin-auto rounded-md bg-teal-100">
+            <h2 className="text-2xl font-bold mb-6 text-center text-green-900">User Form</h2>
             {/* Name */}
             <div className="mb-4">
                 <label className="block text-gray-700 font-medium mb-2">Name:</label>
@@ -263,6 +263,7 @@ const UserForm = () => {
                 Submit
             </button>
         </form>
+        </div>
     );
 };
 
