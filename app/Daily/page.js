@@ -6,20 +6,31 @@ export default function YesNoForm() {
   const [formData, setFormData] = useState({
     procedure_date: '',
     procedure_name: '',
-    symptoms: {},
+    symptoms: {},  // Track symptoms data in the form state
   });
   const [patients, setPatients] = useState([]); // State to store fetched patient data
+  const [selectedPatient, setSelectedPatient] = useState(null); // Track selected patient
+  const [selectedPatientDetails, setSelectedPatientDetails] = useState(null); // To store details of selected patient
 
+  // Effect to update selectedPatientDetails when selectedPatient changes
+  useEffect(() => {
+    console.log('Selected Patient:', selectedPatient); // Debugging the selected patient
+    if (selectedPatient) {
+      const patientDetails = patients.find(patient => patient.patient_id === selectedPatient);
+      setSelectedPatientDetails(patientDetails);
+    }
+  }, [selectedPatient, patients]);
+  
   useEffect(() => {
     // Fetch patient data from the database
     axios.get('http://localhost:3000/user')
       .then((response) => {
         const data = response.data.patients;
         setPatients(data); // Save patient data in the state
-        console.log(data);
+        console.log('Fetched patients:', data); // Debugging fetched patients
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching patient data:', error);
       });
   }, []); // Run this only once on component mount
 
@@ -65,12 +76,57 @@ export default function YesNoForm() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Submitted:', formData);
-    // You can process the form data here or send it to a backend API
+    
+    if ( !formData.procedure_name || !formData.procedure_date) {
+      console.log('Form Data:', formData.procedure_name);
+      console.log('Form Data:', formData.procedure_date);
+      console.error("No patient selected or form data incomplete!");
+      alert("Please select a patient and fill all required fields.");
+      return;
+    }
+  
+    console.log('Form data:', formData);
+  
+    try {
+      const response = await fetch(`http://localhost:3000/user/symptoms/${formData}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ formData }),
+      });
+    
+      const responseText = await response.text(); // Get raw response text
+      console.log('Response Text:', responseText);  // Log the raw response
+      
+      if (response.ok) {
+        const data = JSON.parse(responseText);  // Parse the JSON if it's valid
+        console.log('Form submission successful:', data);
+      } else {
+        console.error('Form submission failed:', responseText);  // Log the failed response
+      }
+    } catch (error) {
+      console.error('Network error during form submission:', error);
+      alert('An error occurred while submitting the form. Please try again.');
+    }
+    
   };
-
+  useEffect(() => {
+   console.log('Selected Patient:');
+    if (selectedPatient) {
+      axios.get(`http://localhost:3000/user/symptoms/${selectedPatient}`)
+        .then((response) => {
+          const patientData = response.data; // The patient's symptoms data
+          console.log('Patient Symptoms Data:', patientData);
+        })
+        .catch((error) => {
+          console.error('Error fetching patient symptoms data:', error);
+        });
+    }
+  }, [selectedPatient]);
+  
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Hospital Best Practice Check</h1>
@@ -92,7 +148,11 @@ export default function YesNoForm() {
             <select
               name="procedure_name"
               value={formData.procedure_name}
-              onChange={(e) => setFormData({ ...formData, procedure_name: e.target.value })}
+              onChange={(e) => {
+                setFormData({ ...formData, procedure_name: e.target.value });
+                setSelectedPatient(e.target.value); // Update the selected patient
+                console.log('Selected Patient ID:', e.target.value); // Debugging the selected ID
+              }}
               required
               style={styles.input}
             >
@@ -105,13 +165,20 @@ export default function YesNoForm() {
             </select>
           </label>
         </div>
+        {selectedPatientDetails && (
+          <div style={styles.selectedPatientInfo}>
+            <p><strong>Selected Patient:</strong></p>
+            <p>Name: {selectedPatientDetails.name}</p>
+            <p>ID: {selectedPatientDetails.patient_id}</p>
+          </div>
+        )}
 
         {/* Scrollable Table Container */}
         <div style={styles.scrollContainer}>
           <table style={styles.table}>
             <thead>
               <tr>
-                <th style={{ ...styles.tableHeader, width: '300px' }}>Post-op Day</th> {/* Increased width for Post-op Day */}
+                <th style={{ ...styles.tableHeader, width: '300px' }}>Post-op Day</th>
                 {days.map((day) => (
                   <th key={day} style={styles.tableHeader}>{day}</th>
                 ))}
@@ -126,12 +193,12 @@ export default function YesNoForm() {
                       <button
                         type="button"
                         onClick={() => toggleTickCross(symptom, day)}
-                        disabled={!formData.procedure_date || !formData.procedure_name} // Disable button if inputs are empty
+                        disabled={!formData.procedure_date || !formData.procedure_name}
                         style={{
                           ...styles.toggleButton,
                           backgroundColor: formData.symptoms[symptom][day] === 'tick' ? '#28a745' : '#dc3545',
                           color: 'white',
-                          opacity: !formData.procedure_date || !formData.procedure_name ? 0.5 : 1, // Adjust opacity if disabled
+                          opacity: !formData.procedure_date || !formData.procedure_name ? 0.5 : 1,
                           cursor: !formData.procedure_date || !formData.procedure_name ? 'not-allowed' : 'pointer',
                         }}
                       >
