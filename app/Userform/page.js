@@ -13,18 +13,55 @@ const UserForm = () => {
         dob: '',
         address: '',
         phone: '',
-        role: ''
+        role: '',
     });
 
+    const [otpSent, setOtpSent] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [otpMessage, setOtpMessage] = useState('');
+    const [otp, setOtp] = useState(''); // OTP entered by the user
+    const [sentOtp, setSentOtp] = useState(''); // OTP sent by the backend
     const router = useRouter();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
-            [name]: value
+            [name]: value,
         });
+    };
+
+    const sendOtp = async () => {
+        if (!formData.email) {
+            setOtpMessage('Please enter an email to receive OTP.');
+            return;
+        }
+    
+        try {
+            const response = await fetch('http://localhost:3000/send-otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: formData.email }),
+            });
+    
+            if (response.ok) {
+                const data = await response.json();
+                setOtpSent(true);
+                setOtpMessage('OTP sent successfully. Please check your email.');
+    
+                // Store the sent OTP for validation
+                setSentOtp(data.otp); // Assuming the backend returns the OTP
+                console.log('OTP sent successfully:', data); // Log the OTP data
+            } else {
+                const errorData = await response.json();
+                setOtpMessage(errorData.Error || 'Failed to send OTP.');
+            }
+        } catch (error) {
+            console.error('Error sending OTP:', error);
+            setOtpMessage('An error occurred while sending the OTP.');
+        }
     };
 
     const validateForm = () => {
@@ -42,11 +79,13 @@ const UserForm = () => {
         if (!phone) return 'Phone number is required';
         if (!/^\d{10}$/.test(phone)) return 'Phone number must be 10 digits';
         if (!role) return 'Role is required';
+        console.log(sentOtp,otp);
+        if (parseInt(otp) !== parseInt(sentOtp)) return 'OTP does not match';
         return null;
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
 
         const validationError = validateForm();
         if (validationError) {
@@ -66,16 +105,15 @@ const UserForm = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log('Registration successful:', data);
-                router.push("/Patient1");
+                router.push('/Patient1');
             } else {
                 const errorData = await response.json();
                 console.error('Error details:', errorData);
                 alert(errorData.Error || 'Registration failed');
             }
-            
         } catch (error) {
-            console.log('Network or other error during login:', error);
-            alert('An error occurred while logging in. Please try again.');
+            console.error('Network or other error during registration:', error);
+            alert('An error occurred while registering. Please try again.');
         }
     };
 
@@ -103,12 +141,33 @@ const UserForm = () => {
                     onChange={handleChange}
                     className="w-full p-2 border border-gray-300 rounded-md"
                 />
+                <button
+                    type="button"
+                    onClick={sendOtp}
+                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                >
+                    Get OTP
+                </button>
+                {otpMessage && <p className="text-sm text-gray-600 mt-2">{otpMessage}</p>}
             </div>
+            {/* OTP */}
+            {otpSent && (
+                <div className="mb-4">
+                    <label className="block text-gray-700 font-medium mb-2">Enter OTP:</label>
+                    <input
+                        type="text"
+                        name="otp"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value)}
+                        className="w-full p-2 border border-gray-300 rounded-md"
+                    />
+                </div>
+            )}
             {/* Password */}
             <div className="mb-4 relative">
                 <label className="block text-gray-700 font-medium mb-2">Password:</label>
                 <input
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     name="password"
                     value={formData.password}
                     onChange={handleChange}

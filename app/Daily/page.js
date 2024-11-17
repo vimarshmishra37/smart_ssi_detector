@@ -1,5 +1,6 @@
 'use client';
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 export default function YesNoForm() {
   const [formData, setFormData] = useState({
@@ -7,9 +8,23 @@ export default function YesNoForm() {
     procedure_name: '',
     symptoms: {},
   });
+  const [patients, setPatients] = useState([]); // State to store fetched patient data
+
+  useEffect(() => {
+    // Fetch patient data from the database
+    axios.get('http://localhost:3000/user')
+      .then((response) => {
+        const data = response.data.patients;
+        setPatients(data); // Save patient data in the state
+        console.log(data);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+      });
+  }, []); // Run this only once on component mount
 
   const days = Array.from({ length: 90 }, (_, i) => i + 1);
-  
+
   // Array of symptom names
   const symptomNames = [
     "Purulent discharge from incision/wound",
@@ -74,15 +89,20 @@ export default function YesNoForm() {
           </label>
           <label>
             Procedure Name:
-            <input
-              type="text"
+            <select
               name="procedure_name"
               value={formData.procedure_name}
               onChange={(e) => setFormData({ ...formData, procedure_name: e.target.value })}
-              placeholder="Enter Procedure Name"
               required
               style={styles.input}
-            />
+            >
+              <option value="" disabled>Select Procedure Name</option>
+              {patients.map((patient) => (
+                <option key={patient.patient_id} value={patient.patient_id}>
+                  {`${patient.name} (ID: ${patient.patient_id})`}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
 
