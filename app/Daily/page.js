@@ -60,22 +60,65 @@ export default function YesNoForm() {
     }
   });
 
+  useEffect(() => {
+    if (selectedPatient) {
+      axios.get(`http://localhost:3000/user/symptoms/${selectedPatient}`)
+        .then((response) => {
+          const patientData = response.data;
+          console.log('Fetched Patient Data:', patientData);
+  
+          // Build the updated symptoms object
+          const updatedSymptoms = {};
+          symptomNames.forEach((symptom) => {
+            updatedSymptoms[symptom] = {}; // Ensure each symptom has a nested object
+          });
+  
+          patientData.symptoms.forEach((symptom) => {
+            symptom.days.forEach((day) => {
+              if (!updatedSymptoms[symptom.symptom_name]) {
+                updatedSymptoms[symptom.symptom_name] = {};
+              }
+              updatedSymptoms[symptom.symptom_name][day] = 'tick';
+
+              
+            });
+          });
+  
+          console.log('Updated Symptoms State:', updatedSymptoms);
+  
+          setFormData((prevData) => ({
+            ...prevData,
+            symptoms: updatedSymptoms,
+          }));
+        })
+        .catch((error) => {
+          console.error('Error fetching patient symptoms data:', error);
+        });
+    }
+  }, [selectedPatient]);
+  
   const toggleTickCross = (symptom, day) => {
-    // Check if procedure date and name are filled before toggling
+    console.log('Toggling day:', day, 'for symptom:', symptom);
     if (formData.procedure_date && formData.procedure_name) {
-      setFormData((prevData) => ({
-        ...prevData,
-        symptoms: {
-          ...prevData.symptoms,
-          [symptom]: {
-            ...prevData.symptoms[symptom],
-            [day]: prevData.symptoms[symptom][day] === 'tick' ? 'cross' : 'tick',
-          }
-        }
-      }));
+      setFormData((prevData) => {
+        const updatedDayValue =
+          prevData.symptoms[symptom][day] === 'tick' ? 'cross' : 'tick';
+        console.log('Updated Day Value:', updatedDayValue,symptom,day);
+  
+        return {
+          ...prevData,
+          symptoms: {
+            ...prevData.symptoms,
+            [symptom]: {
+              ...prevData.symptoms[symptom],
+              [day]: updatedDayValue,
+            },
+          },
+        };
+      });
     }
   };
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -113,19 +156,7 @@ export default function YesNoForm() {
     }
     
   };
-  useEffect(() => {
-   console.log('Selected Patient:');
-    if (selectedPatient) {
-      axios.get(`http://localhost:3000/user/symptoms/${selectedPatient}`)
-        .then((response) => {
-          const patientData = response.data; // The patient's symptoms data
-          console.log('Patient Symptoms Data:', patientData);
-        })
-        .catch((error) => {
-          console.error('Error fetching patient symptoms data:', error);
-        });
-    }
-  }, [selectedPatient]);
+
   
   return (
     <div style={styles.container}>

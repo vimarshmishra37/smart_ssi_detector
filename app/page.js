@@ -92,49 +92,63 @@ export default function Home() {
         </div>
     );
 }
-
 const styles = {
-  container: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    backgroundColor: '#f0f2f5',
-  },
-  form: {
-    backgroundColor: 'white',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    marginBottom: '20px',
-    fontSize: '24px',
-    textAlign: 'center',
-  },
-  inputGroup: {
-    marginBottom: '15px',
-  },
-  label: {
-    display: 'block',
-    marginBottom: '5px',
-    fontSize: '16px',
-  },
-  input: {
-    width: '100%',
-    padding: '10px',
-    fontSize: '16px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-  },
-  button: {
-    width: '100%',
-    padding: '10px',
-    fontSize: '16px',
-    color: 'white',
-    backgroundColor: '#007bff',
-    border: 'none',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-};
+    container: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundColor: '#e0f7fa',
+    },
+    form: {
+      backgroundColor: '#ffffff',
+      padding: '30px',
+      borderRadius: '10px',
+      boxShadow: '0 6px 12px rgba(0, 128, 128, 0.2)',
+      width: '100%',
+      maxWidth: '400px',
+    },
+    title: {
+      marginBottom: '25px',
+      fontSize: '26px',
+      color: '#004d40',
+      textAlign: 'center',
+      fontWeight: 'bold',
+      borderBottom: '2px solid #004d40',
+      paddingBottom: '10px',
+    },
+    inputGroup: {
+      marginBottom: '20px',
+    },
+    label: {
+      display: 'block',
+      marginBottom: '8px',
+      fontSize: '16px',
+      color: '#00796b',
+    },
+    input: {
+      width: '100%',
+      padding: '12px',
+      fontSize: '16px',
+      borderRadius: '5px',
+      border: '1px solid #00796b',
+      backgroundColor: '#e0f2f1',
+    },
+    button: {
+      width: '100%',
+      padding: '12px',
+      fontSize: '18px',
+      color: 'white',
+      backgroundColor: '#00796b',
+      border: 'none',
+      borderRadius: '5px',
+      cursor: 'pointer',
+      fontWeight: 'bold',
+      transition: 'background-color 0.3s',
+    },
+  };
+  
+  // Hover effect for button
+  styles.button[':hover'] = {
+      backgroundColor: '#004d40',
+  };
