@@ -6,37 +6,12 @@ export default function YesNoForm() {
   const [formData, setFormData] = useState({
     procedure_date: '',
     procedure_name: '',
-    symptoms: {},  // Track symptoms data in the form state
+    symptoms: {},
   });
-  const [patients, setPatients] = useState([]); // State to store fetched patient data
-  const [selectedPatient, setSelectedPatient] = useState(null); // Track selected patient
-  const [selectedPatientDetails, setSelectedPatientDetails] = useState(null); // To store details of selected patient
+  const [patients, setPatients] = useState([]);
+  const [patientsData, setPatientsData] = useState({});
+  const [selectedPatient, setSelectedPatient] = useState(null);
 
-  // Effect to update selectedPatientDetails when selectedPatient changes
-  useEffect(() => {
-    console.log('Selected Patient:', selectedPatient); // Debugging the selected patient
-    if (selectedPatient) {
-      const patientDetails = patients.find(patient => patient.patient_id === selectedPatient);
-      setSelectedPatientDetails(patientDetails);
-    }
-  }, [selectedPatient, patients]);
-  
-  useEffect(() => {
-    // Fetch patient data from the database
-    axios.get('http://localhost:3000/user')
-      .then((response) => {
-        const data = response.data.patients;
-        setPatients(data); // Save patient data in the state
-        console.log('Fetched patients:', data); // Debugging fetched patients
-      })
-      .catch((error) => {
-        console.error('Error fetching patient data:', error);
-      });
-  }, []); // Run this only once on component mount
-
-  const days = Array.from({ length: 90 }, (_, i) => i + 1);
-
-  // Array of symptom names
   const symptomNames = [
     "Purulent discharge from incision/wound",
     "Localized pain and tenderness",
@@ -50,61 +25,66 @@ export default function YesNoForm() {
     "Positive culture from discharge material",
     "Blood culture sent",
     "Physician institutes of diagnosis of SSI",
-    "Any other"
+    "Any other",
   ];
 
-  // Initialize symptoms in formData state
-  symptomNames.forEach(symptom => {
-    if (!formData.symptoms[symptom]) {
-      formData.symptoms[symptom] = {};
+  const days = Array.from({ length: 90 }, (_, i) => i + 1);
+
+  useEffect(() => {
+    // Load patient data from backend
+    axios.get('http://localhost:3000/user')
+      .then(response => {
+        const data = response.data.patients;
+        setPatients(data);
+      })
+      .catch(error => {
+        console.error('Error fetching patient data:', error);
+      });
+
+    // Load saved patientsData from localStorage
+    const savedData = localStorage.getItem('patientsData');
+    if (savedData) {
+      setPatientsData(JSON.parse(savedData));
     }
-  });
+  }, []);
 
   useEffect(() => {
     if (selectedPatient) {
-      axios.get(`http://localhost:3000/user/symptoms/${selectedPatient}`)
-        .then((response) => {
-          const patientData = response.data;
-          console.log('Fetched Patient Data:', patientData);
-  
-          // Build the updated symptoms object
-          const updatedSymptoms = {};
-          symptomNames.forEach((symptom) => {
-            updatedSymptoms[symptom] = {}; // Ensure each symptom has a nested object
-          });
-  
-          patientData.symptoms.forEach((symptom) => {
-            symptom.days.forEach((day) => {
-              if (!updatedSymptoms[symptom.symptom_name]) {
-                updatedSymptoms[symptom.symptom_name] = {};
-              }
-              updatedSymptoms[symptom.symptom_name][day] = 'tick';
-
-              
-            });
-          });
-  
-          console.log('Updated Symptoms State:', updatedSymptoms);
-  
-          setFormData((prevData) => ({
+      // Save current formData before switching
+      if (formData.procedure_name) {
+        setPatientsData((prevData) => {
+          const updatedData = {
             ...prevData,
-            symptoms: updatedSymptoms,
-          }));
-        })
-        .catch((error) => {
-          console.error('Error fetching patient symptoms data:', error);
+            [formData.procedure_name]: formData.symptoms,
+          };
+          localStorage.setItem('patientsData', JSON.stringify(updatedData)); // Persist to localStorage
+          return updatedData;
         });
+      }
+
+      // Load selected patient's data from `patientsData`
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        procedure_name: selectedPatient,
+        symptoms: patientsData[selectedPatient] || initializeEmptySymptoms(),
+      }));
     }
   }, [selectedPatient]);
-  
+
+  const initializeEmptySymptoms = () => {
+    const symptoms = {};
+    symptomNames.forEach(symptom => {
+      symptoms[symptom] = {};
+    });
+    return symptoms;
+  };
+
   const toggleTickCross = (symptom, day) => {
-    console.log('Toggling day:', day, 'for symptom:', symptom);
     if (formData.procedure_date && formData.procedure_name) {
       setFormData((prevData) => {
-        const updatedDayValue =
-          prevData.symptoms[symptom][day] === 'tick' ? 'cross' : 'tick';
-        console.log('Updated Day Value:', updatedDayValue,symptom,day);
-  
+        const updatedDayValue = 
+          prevData.symptoms[symptom]?.[day] === 'tick' ? 'cross' : 'tick';
+
         return {
           ...prevData,
           symptoms: {
@@ -118,46 +98,35 @@ export default function YesNoForm() {
       });
     }
   };
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    if ( !formData.procedure_name || !formData.procedure_date) {
-      console.log('Form Data:', formData.procedure_name);
-      console.log('Form Data:', formData.procedure_date);
-      console.error("No patient selected or form data incomplete!");
-      alert("Please select a patient and fill all required fields.");
+
+    if (!formData.procedure_name || !formData.procedure_date) {
+      alert("Please fill all required fields.");
       return;
     }
-  
-    console.log('Form data:', formData);
-  
+
     try {
-      const response = await fetch(`http://localhost:3000/user/symptoms/${formData}`, {
+      const response = await fetch(`http://localhost:3000/user/symptoms/${formData.procedure_name}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ formData }),
       });
-    
-      const responseText = await response.text(); // Get raw response text
-      console.log('Response Text:', responseText);  // Log the raw response
-      
+
       if (response.ok) {
-        const data = JSON.parse(responseText);  // Parse the JSON if it's valid
-        console.log('Form submission successful:', data);
+        alert('Form submission successful!');
       } else {
-        console.error('Form submission failed:', responseText);  // Log the failed response
+        alert('Form submission failed.');
       }
     } catch (error) {
       console.error('Network error during form submission:', error);
-      alert('An error occurred while submitting the form. Please try again.');
+      alert('An error occurred while submitting the form.');
     }
-    
   };
 
-  
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Hospital Best Practice Check</h1>
@@ -175,19 +144,15 @@ export default function YesNoForm() {
             />
           </label>
           <label>
-            Procedure Name:
+            Patient ID:
             <select
               name="procedure_name"
-              value={formData.procedure_name}
-              onChange={(e) => {
-                setFormData({ ...formData, procedure_name: e.target.value });
-                setSelectedPatient(e.target.value); // Update the selected patient
-                console.log('Selected Patient ID:', e.target.value); // Debugging the selected ID
-              }}
+              value={selectedPatient || ''}
+              onChange={(e) => setSelectedPatient(e.target.value)}
               required
               style={styles.input}
             >
-              <option value="" disabled>Select Procedure Name</option>
+              <option value="" disabled>Select Patient</option>
               {patients.map((patient) => (
                 <option key={patient.patient_id} value={patient.patient_id}>
                   {`${patient.name} (ID: ${patient.patient_id})`}
@@ -196,15 +161,7 @@ export default function YesNoForm() {
             </select>
           </label>
         </div>
-        {selectedPatientDetails && (
-          <div style={styles.selectedPatientInfo}>
-            <p><strong>Selected Patient:</strong></p>
-            <p>Name: {selectedPatientDetails.name}</p>
-            <p>ID: {selectedPatientDetails.patient_id}</p>
-          </div>
-        )}
 
-        {/* Scrollable Table Container */}
         <div style={styles.scrollContainer}>
           <table style={styles.table}>
             <thead>
@@ -224,16 +181,13 @@ export default function YesNoForm() {
                       <button
                         type="button"
                         onClick={() => toggleTickCross(symptom, day)}
-                        disabled={!formData.procedure_date || !formData.procedure_name}
                         style={{
                           ...styles.toggleButton,
-                          backgroundColor: formData.symptoms[symptom][day] === 'tick' ? '#28a745' : '#dc3545',
+                          backgroundColor: formData.symptoms[symptom]?.[day] === 'tick' ? '#28a745' : '#dc3545',
                           color: 'white',
-                          opacity: !formData.procedure_date || !formData.procedure_name ? 0.5 : 1,
-                          cursor: !formData.procedure_date || !formData.procedure_name ? 'not-allowed' : 'pointer',
                         }}
                       >
-                        {formData.symptoms[symptom][day] === 'tick' ? '✔️' : '❌'}
+                        {formData.symptoms[symptom]?.[day] === 'tick' ? '✔️' : '❌'}
                       </button>
                     </td>
                   ))}
@@ -276,12 +230,12 @@ const styles = {
     width: '200px',
   },
   scrollContainer: {
-    overflowX: 'auto',  // Enable horizontal scrolling
+    overflowX: 'auto',
     marginBottom: '20px',
   },
   table: {
-    width: '100%',      // Make the table take the full width
-    minWidth: '1200px', // Ensure the table is wide enough to require scrolling
+    width: '100%',
+    minWidth: '1200px',
     borderCollapse: 'collapse',
   },
   tableHeader: {
@@ -295,7 +249,7 @@ const styles = {
     padding: '10px',
     border: '1px solid #ddd',
     textAlign: 'left',
-    width: '200px',  // Set width for symptom column
+    width: '200px',
   },
   tableCell: {
     padding: '5px',
