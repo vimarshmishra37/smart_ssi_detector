@@ -1,71 +1,46 @@
 'use client';
 import React from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation
-
-export default function Dashboard() {
-  const router = useRouter();
-
-  const handleNewPatient = () => {
-    // Navigate to the new patient form/page (you can change the route as needed)
-    router.push('/Patient1');
-  };
-
-  const handleDailyUpdates = () => {
-    // Navigate to the daily updates page (you can change the route as needed)
-    router.push('/Daily');
-  };
-
-  return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Dashboard</h1>
-      <div style={styles.buttonContainer}>
-        <button style={styles.button} onClick={handleNewPatient}>
-          New Patient
-        </button>
-        <button style={styles.button} onClick={handleDailyUpdates}>
-          Daily Updates
-        </button>
-      </div>
-    </div>
-  );
-}
+import { useRouter } from 'next/navigation';
 
 const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    backgroundColor: '#f9f9f9',
-  },
-  heading: {
-    fontSize: '24px',
-    marginBottom: '20px',
-  },
-  buttonContainer: {
-    display: 'flex',
-    gap: '20px', // Space between buttons
-  },
-  button: {
-    padding: '10px 20px',
-    fontSize: '16px',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-    backgroundColor: '#007BFF',
-    color: 'white',
-    transition: 'background-color 0.3s',
-  },
+    container: "min-h-screen bg-teal-50 flex flex-col items-center justify-center",
+    wrapper: "max-w-4xl w-full px-4",
+    heading: "text-3xl font-bold text-teal-800 text-center mb-12",
+    buttonContainer: "flex flex-col sm:flex-row gap-6 justify-center items-center",
+    button: "w-full sm:w-64 px-6 py-4 text-lg font-medium text-white bg-teal-600 rounded-lg hover:bg-teal-700 transition-colors duration-200 shadow-md hover:shadow-lg"
 };
 
-// Add a hover effect for better UX
-const buttonHoverStyle = {
-  backgroundColor: '#0056b3', // Darker shade for hover
-};
+export default function Dashboard() {
+    const router = useRouter();
 
-// Style the button for hover effect
-const styleWithHover = {
-  ...styles.button,
-  ':hover': buttonHoverStyle,
-};
+    const handleNewPatient = () => {
+        router.push('/Patient1');
+    };
+
+    const handleDailyUpdates = () => {
+        router.push('/Daily');
+    };
+
+    return (
+        <div className={styles.container}>
+            <div className={styles.wrapper}>
+                <h1 className={styles.heading}>Healthcare Dashboard</h1>
+                
+                <div className={styles.buttonContainer}>
+                    <button 
+                        onClick={handleNewPatient}
+                        className={styles.button}
+                    >
+                        New Patient Registration
+                    </button>
+                    <button 
+                        onClick={handleDailyUpdates}
+                        className={styles.button}
+                    >
+                        Daily Updates
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}

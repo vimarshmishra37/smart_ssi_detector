@@ -219,7 +219,7 @@ export default function Patient() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
     <>
-      <form onSubmit={handleSubmit} className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} style={styles.container}>
         <div id="pdfContent">
           <h2 className="text-xl font-semibold text-center mb-6">Surgical Site Infection Surveillance Form</h2>
           
@@ -400,3 +400,122 @@ export default function Patient() {
         </Suspense>
   );
 }
+
+const styles = {
+  container: {
+    width: '75%',
+    margin: '0 auto',
+    backgroundColor: '#f3f4f6',
+    padding: '1.5rem',
+    borderRadius: '0.5rem',
+    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+  },
+  title: {
+    fontSize: '1.25rem',
+    fontWeight: '600',
+    textAlign: 'center',
+    marginBottom: '1.5rem',
+  },
+  formGroup: {
+    marginBottom: '1rem',
+  },
+  label: {
+    display: 'block',
+    color: '#374151',
+    fontWeight: '600',
+    marginBottom: '0.5rem',
+  },
+  input: {
+    width: '100%',
+    border: '1px solid #d1d5db',
+    borderRadius: '0.375rem',
+    padding: '0.5rem',
+    height: '3rem',
+  },
+  select: {
+    width: '100%',
+    border: '1px solid #d1d5db',
+    borderRadius: '0.375rem',
+    padding: '0.5rem',
+    height: '3rem',
+    backgroundColor: 'white',
+  },
+  flexContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '1rem',
+  },
+  halfWidth: {
+    width: '48%',
+  },
+  radioGroup: {
+    display: 'flex',
+    gap: '1rem',
+  },
+  radioLabel: {
+    display: 'inline-flex',
+    alignItems: 'center',
+  },
+  radio: {
+    marginRight: '0.5rem',
+  },
+  buttonContainer: {
+    marginTop: '1.5rem',
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  submitButton: {
+    padding: '0.5rem 1rem',
+    backgroundColor: '#3b82f6',
+    color: 'white',
+    borderRadius: '0.375rem',
+    border: 'none',
+    cursor: 'pointer',
+    ':hover': {
+      backgroundColor: '#2563eb',
+    },
+  },
+  downloadButton: {
+    padding: '0.5rem 1rem',
+    backgroundColor: '#10b981',
+    color: 'white',
+    borderRadius: '0.375rem',
+    border: 'none',
+    cursor: 'pointer',
+    ':hover': {
+      backgroundColor: '#059669',
+    },
+  },
+  conditionalFields: {
+    marginTop: '1rem',
+  },
+  errorText: {
+    color: '#ef4444',
+    fontSize: '0.875rem',
+    marginTop: '0.25rem',
+  },
+  successText: {
+    color: '#10b981',
+    fontSize: '0.875rem',
+    marginTop: '0.25rem',
+  },
+};
+
+const hoverStyles = {
+  submitButton: {
+    ...styles.submitButton,
+    ':hover': {
+      backgroundColor: '#2563eb',
+      transform: 'translateY(-1px)',
+      transition: 'all 0.2s ease',
+    },
+  },
+  downloadButton: {
+    ...styles.downloadButton,
+    ':hover': {
+      backgroundColor: '#059669',
+      transform: 'translateY(-1px)',
+      transition: 'all 0.2s ease',
+    },
+  },
+};

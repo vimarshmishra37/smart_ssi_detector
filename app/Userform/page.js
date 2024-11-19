@@ -3,6 +3,23 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
 
+const styles = {
+    container: "min-h-screen bg-teal-50 py-8",
+    formWrapper: "max-w-lg mx-auto p-8 bg-white shadow-lg rounded-lg border border-teal-200",
+    heading: "text-2xl font-bold mb-8 text-teal-800 text-center",
+    inputGroup: "mb-6",
+    label: "block text-teal-700 font-medium mb-2",
+    input: "w-full p-3 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent",
+    select: "w-full p-3 border border-teal-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent bg-white",
+    button: "w-full bg-teal-600 text-white p-3 rounded-lg hover:bg-teal-700 transition duration-200 font-medium",
+    otpButton: "mt-2 bg-teal-600 text-white px-6 py-2 rounded-lg hover:bg-teal-700 transition duration-200",
+    otpMessage: "text-sm mt-2",
+    otpSuccessMessage: "text-green-600",
+    otpErrorMessage: "text-red-600",
+    passwordWrapper: "relative",
+    eyeIcon: "absolute right-3 top-[65%] transform -translate-y-1/2 text-teal-600 cursor-pointer"
+};
+
 const UserForm = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -19,8 +36,8 @@ const UserForm = () => {
     const [otpSent, setOtpSent] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [otpMessage, setOtpMessage] = useState('');
-    const [otp, setOtp] = useState(''); // OTP entered by the user
-    const [sentOtp, setSentOtp] = useState(''); // OTP sent by the backend
+    const [otp, setOtp] = useState('');
+    const [sentOtp, setSentOtp] = useState('');
     const router = useRouter();
 
     const handleChange = (e) => {
@@ -50,10 +67,8 @@ const UserForm = () => {
                 const data = await response.json();
                 setOtpSent(true);
                 setOtpMessage('OTP sent successfully. Please check your email.');
-
-                // Store the sent OTP for validation
-                setSentOtp(data.otp); // Assuming the backend returns the OTP
-                console.log('OTP sent successfully:', data); // Log the OTP data
+                setSentOtp(data.otp);
+                console.log('OTP sent successfully:', data);
             } else {
                 const errorData = await response.json();
                 setOtpMessage(errorData.Error || 'Failed to send OTP.');
@@ -117,152 +132,159 @@ const UserForm = () => {
     };
 
     return (
-        <div className='bg-teal-100'>
-        <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-6 bg-white shadow-sm margin-auto rounded-md bg-teal-100">
-            <h2 className="text-2xl font-bold mb-6 text-center text-green-900">User Form</h2>
-            {/* Name */}
-            <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Name:</label>
-                <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                />
-            </div>
-            {/* Email */}
-            <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Email:</label>
-                <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                />
-                <button
-                    type="button"
-                    onClick={sendOtp}
-                    className="mt-2 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-                >
-                    Get OTP
-                </button>
-                {otpMessage && <p className="text-sm text-gray-600 mt-2">{otpMessage}</p>}
-            </div>
-            {/* OTP */}
-            {otpSent && (
-                <div className="mb-4">
-                    <label className="block text-gray-700 font-medium mb-2">Enter OTP:</label>
+        <div className={styles.container}>
+            <form onSubmit={handleSubmit} className={styles.formWrapper}>
+                <h2 className={styles.heading}>Healthcare Registration</h2>
+                
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Name:</label>
                     <input
                         type="text"
-                        name="otp"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                        className="w-full p-2 border border-gray-300 rounded-md"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        className={styles.input}
                     />
                 </div>
-            )}
-            {/* Password */}
-            <div className="mb-4 relative">
-                <label className="block text-gray-700 font-medium mb-2">Password:</label>
-                <input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="w-full p-2 pr-10 border border-gray-300 rounded-md"
-                />
-                <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-600"
-                >
-                    {showPassword ? (
-                        <EyeSlashIcon className="h-5 w-5 mt-8" />
-                    ) : (
-                        <EyeIcon className="h-5 w-5 mt-8" />
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Email:</label>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className={styles.input}
+                    />
+                    <button
+                        type="button"
+                        onClick={sendOtp}
+                        className={styles.otpButton}
+                    >
+                        Get OTP
+                    </button>
+                    {otpMessage && (
+                        <p className={`${styles.otpMessage} ${otpSent ? styles.otpSuccessMessage : styles.otpErrorMessage}`}>
+                            {otpMessage}
+                        </p>
                     )}
+                </div>
+
+                {otpSent && (
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Enter OTP:</label>
+                        <input
+                            type="text"
+                            name="otp"
+                            value={otp}
+                            onChange={(e) => setOtp(e.target.value)}
+                            className={styles.input}
+                        />
+                    </div>
+                )}
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Password:</label>
+                    <div className={styles.passwordWrapper}>
+                        <input
+                            type={showPassword ? 'text' : 'password'}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            className={styles.input}
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className={styles.eyeIcon}
+                        >
+                            {showPassword ? (
+                                <EyeSlashIcon className="h-5 w-5" />
+                            ) : (
+                                <EyeIcon className="h-5 w-5" />
+                            )}
+                        </button>
+                    </div>
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Age:</label>
+                    <input
+                        type="number"
+                        name="age"
+                        value={formData.age}
+                        onChange={handleChange}
+                        className={styles.input}
+                    />
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Gender:</label>
+                    <select
+                        name="gender"
+                        value={formData.gender}
+                        onChange={handleChange}
+                        className={styles.select}
+                    >
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Date of Birth:</label>
+                    <input
+                        type="date"
+                        name="dob"
+                        value={formData.dob}
+                        onChange={handleChange}
+                        className={styles.input}
+                    />
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Address:</label>
+                    <input
+                        type="text"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleChange}
+                        className={styles.input}
+                    />
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Phone:</label>
+                    <input
+                        type="tel"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className={styles.input}
+                    />
+                </div>
+
+                <div className={styles.inputGroup}>
+                    <label className={styles.label}>Role:</label>
+                    <select
+                        name="role"
+                        value={formData.role}
+                        onChange={handleChange}
+                        className={styles.select}
+                    >
+                        <option value="">Select Role</option>
+                        <option value="Doctor">Doctor</option>
+                        <option value="Nurse">Nurse</option>
+                        <option value="Patient">Patient</option>
+                    </select>
+                </div>
+
+                <button type="submit" className={styles.button}>
+                    Register
                 </button>
-            </div>
-            {/* Age */}
-            <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Age:</label>
-                <input
-                    type="number"
-                    name="age"
-                    value={formData.age}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                />
-            </div>
-            {/* Gender Dropdown */}
-            <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Gender:</label>
-                <select
-                    name="gender"
-                    value={formData.gender}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                >
-                    <option value="">Select Gender</option>
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            {/* Date of Birth */}
-            <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Date of Birth:</label>
-                <input
-                    type="date"
-                    name="dob"
-                    value={formData.dob}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                />
-            </div>
-            {/* Address */}
-            <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Address:</label>
-                <input
-                    type="text"
-                    name="address"
-                    value={formData.address}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                />
-            </div>
-            {/* Phone */}
-            <div className="mb-4">
-                <label className="block text-gray-700 font-medium mb-2">Phone:</label>
-                <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                />
-            </div>
-            {/* Role Dropdown */}
-            <div className="mb-6">
-                <label className="block text-gray-700 font-medium mb-2">Role:</label>
-                <select
-                    name="role"
-                    value={formData.role}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                >
-                    <option value="">Select Role</option>
-                    <option value="Doctor">Doctor</option>
-                    <option value="Nurse">Nurse</option>
-                    <option value="Patient">Patient</option>
-                </select>
-            </div>
-            <button type="submit" className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600">
-                Submit
-            </button>
-        </form>
+            </form>
         </div>
     );
 };
