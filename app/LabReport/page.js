@@ -70,6 +70,7 @@ export default function LabReportForm() {
     };
 
     return (
+        <div className='bg-teal-100 text-teal-800'>
         <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
             <h1 className='text-4xl font-extrabold text-center'>Department of Laboratory Medicine - Microbiology</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
@@ -195,6 +196,7 @@ export default function LabReportForm() {
                     </button>
                 </div>
             </form>
+        </div>
         </div>
     );
 }

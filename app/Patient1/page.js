@@ -9,22 +9,19 @@ export default function Patient() {
 
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
-  const [bmi, setBMI] = useState(""); 
+  const [bmi, setBMI] = useState("");
 
 
-    const calculateBMI = (height, weight) => 
-    {
-      if (height > 0 && weight > 0) 
-        {
-        const heightInMeters = height / 100;
-        const calculatedBMI = (weight / (heightInMeters ** 2)).toFixed(2); 
-        setBMI(calculatedBMI);
-        } 
-        else 
-        {
-          setBMI(""); 
-        }
+  const calculateBMI = (height, weight) => {
+    if (height > 0 && weight > 0) {
+      const heightInMeters = height / 100;
+      const calculatedBMI = (weight / (heightInMeters ** 2)).toFixed(2);
+      setBMI(calculatedBMI);
     }
+    else {
+      setBMI("");
+    }
+  }
 
   const [formData, setFormData] = useState({
     patientName: '',
@@ -225,7 +222,7 @@ export default function Patient() {
         const data = await response.json();
         console.log('Login successful:', data);
         router.push(`/Patient2?patientID=${formData.patientID}`);
-        //router.push("/Patient2");
+
       } else {
         console.log('Login failed');
         const errorData = await response.json();
@@ -242,59 +239,59 @@ export default function Patient() {
     <Suspense fallback={<div>Loading...</div>}>
       <>
         <div className='bg-teal-100 text-teal-800'>
-          <form onSubmit={handleSubmit} style={styles.container} className='bg-white'>
+          <form onSubmit={handleSubmit} style={styles.container} className='bg-gray-100'>
             <div id="pdfContent">
               <h2 className="text-xl font-semibold text-center mb-6">Surgical Site Infection Surveillance Form</h2>
 
               <div className="mb-4">
                 <label htmlFor="patientName" className="block text-teal-800 font-semibold mb-2">Patient Name:</label>
-                <input type="text" id="patientName" name="patientName" value={formData.patientName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                <input type="text" id="patientName" name="patientName" value={formData.patientName} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
               </div>
 
               <div className="flex justify-between mb-4">
                 <div className="w-1/2 pr-2">
                   <label htmlFor="patientID" className="block text-teal-800 font-semibold mb-2">Patient ID:</label>
-                  <input type="text" id="patientID" name="patientID" value={formData.patientID} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                  <input type="text" id="patientID" name="patientID" value={formData.patientID} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
                 </div>
                 <div className="w-1/2 pr-2">
                   <label htmlFor="email" className="block text-teal-800 font-semibold mb-2">Email Id:</label>
-                  <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                  <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
                 </div>
                 <div className="w-1/2 pl-2">
                   <label htmlFor="age" className="block text-teal-800 font-semibold mb-2">Age:</label>
-                  <input type="text" id="age" name="age" value={formData.age} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                  <input type="text" id="age" name="age" value={formData.age} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
                 </div>
               </div>
 
               <div className="flex justify-between mb-4">
 
-              <div className="w-1/2 pr-2">
+                <div className="w-1/2 pr-2">
                   <label htmlFor="weight" className="block text-teal-800 font-semibold mb-2">Weight (in kg):</label>
-                  <input type="number" id="weight" name="weight" className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100"
+                  <input type="number" id="weight" name="weight" className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100"
                     value={weight}
                     onChange={(e) => {
                       const newWeight = e.target.value;
                       setWeight(newWeight);
-                      calculateBMI(height, newWeight); 
+                      calculateBMI(height, newWeight);
                     }}
                   />
                 </div>
 
                 <div className="w-1/2 pr-2">
                   <label htmlFor="height" className="block text-teal-800 font-semibold mb-2">Height (in cm):</label>
-                  <input type="number" id="height" name="height" className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100"
+                  <input type="number" id="height" name="height" className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100"
                     value={height}
                     onChange={(e) => {
                       const newHeight = e.target.value;
                       setHeight(newHeight);
-                      calculateBMI(newHeight, weight); 
+                      calculateBMI(newHeight, weight);
                     }}
                   />
                 </div>
 
                 <div className="w-1/2 pl-2">
                   <label htmlFor="bmi" className="block text-teal-800 font-semibold mb-2">BMI:</label>
-                  <input type="text" id="bmi" name="bmi" className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100"
+                  <input type="text" id="bmi" name="bmi" className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100"
                     value={bmi}
                     disabled
                   />
@@ -305,7 +302,7 @@ export default function Patient() {
                 <div className="w-1/2 pr-2">
                   <div className="mb-4">
                     <label htmlFor="gender" className="block text-teal-800 font-semibold mb-2">Gender:</label>
-                    <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100">
+                    <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100">
                       <option value="">-- Select Gender --</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
@@ -316,7 +313,7 @@ export default function Patient() {
                 <div className="w-1/2 pl-2">
                   <div className="mb-4">
                     <label htmlFor="diabetic" className="block text-teal-800 font-semibold mb-2">Diabetic:</label>
-                    <select id="diabetic" name="diabetic" className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100">
+                    <select id="diabetic" name="diabetic" className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100">
                       <option value="">-- Choose--</option>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>
@@ -329,17 +326,17 @@ export default function Patient() {
               <div className="flex justify-between mb-4">
                 <div className="w-1/2 pr-2">
                   <label htmlFor="dateOfAdmission" className="block text-teal-800 font-semibold mb-2">Date of Admission:</label>
-                  <input type="date" id="dateOfAdmission" name="dateOfAdmission" value={formData.dateOfAdmission} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                  <input type="date" id="dateOfAdmission" name="dateOfAdmission" value={formData.dateOfAdmission} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
                 </div>
                 <div className="w-1/2 pl-2">
                   <label htmlFor="dateOfProcedure" className="block text-teal-800 font-semibold mb-2">Date of Procedure:</label>
-                  <input type="date" id="dateOfProcedure" name="dateOfProcedure" value={formData.dateOfProcedure} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100 mb-2" />
+                  <input type="date" id="dateOfProcedure" name="dateOfProcedure" value={formData.dateOfProcedure} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100 mb-2" />
                 </div>
               </div>
 
               <div className="mb-4">
                 <label htmlFor="admittingDepartment" className="block text-teal-800 font-semibold mb-2">Admitting Department:</label>
-                <select id="admittingDepartment" name="admittingDepartment" value={formData.admittingDepartment} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100">
+                <select id="admittingDepartment" name="admittingDepartment" value={formData.admittingDepartment} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100">
                   <option value="">-- Select Department --</option>
                   {departments.map((dept, index) => (
                     <option key={index} value={dept}>{dept}</option>
@@ -349,7 +346,7 @@ export default function Patient() {
 
               <div className="mb-4">
                 <label htmlFor="procedureName" className="block text-teal-800 font-semibold mb-2">Procedure Name:</label>
-                <select id="procedureName" name="procedureName" value={formData.procedureName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100 mb-2">
+                <select id="procedureName" name="procedureName" value={formData.procedureName} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100 mb-2">
                   <option value="">-- Select Procedure --</option>
                   {procedures.map((procedure, index) => (
                     <option key={index} value={procedure}>{procedure}</option>
@@ -359,7 +356,7 @@ export default function Patient() {
 
               <div className="mb-4">
                 <label htmlFor="surgeon" className="block text-teal-800 font-semibold mb-2">Procedure Done By (Primary Surgeon):</label>
-                <select id="surgeon" name="surgeon" value={formData.surgeon} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100 mb-2">
+                <select id="surgeon" name="surgeon" value={formData.surgeon} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100 mb-2">
                   <option value="">-- Select Surgeon --</option>
                   {surgeons.map((surgeon, index) => (
                     <option key={index} value={surgeon}>{surgeon}</option>
@@ -369,7 +366,7 @@ export default function Patient() {
 
               <div className="mb-4">
                 <label htmlFor="theatre" className="block text-teal-800 font-semibold mb-2">Operation Theatre:</label>
-                <select id="theatre" name="theatre" value={formData.theatre} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100 mb-2">
+                <select id="theatre" name="theatre" value={formData.theatre} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100 mb-2">
                   <option value="">-- Select Theatre --</option>
                   {operationTheatres.map((theatre, index) => (
                     <option key={index} value={theatre}>{theatre}</option>
@@ -432,7 +429,7 @@ export default function Patient() {
                     name="eventDate"
                     value={formData.eventDate}
                     onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100"
+                    className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100"
                   />
                 </div>
               )}
@@ -452,11 +449,11 @@ export default function Patient() {
                 <div className="mb-4">
                   <div className="mb-2">
                     <label htmlFor="antibioticsGiven" className="block text-teal-800 font-semibold mb-2">If Yes, Antibiotics Given:</label>
-                    <input type="text" id="antibioticsGiven" name="antibioticsGiven" value={formData.antibioticsGiven} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                    <input type="text" id="antibioticsGiven" name="antibioticsGiven" value={formData.antibioticsGiven} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
                   </div>
                   <div>
                     <label htmlFor="durationOfPAP" className="block text-teal-800 font-semibold mb-2">Duration of PAP:</label>
-                    <input type="text" id="durationOfPAP" name="durationOfPAP" value={formData.durationOfPAP} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                    <input type="text" id="durationOfPAP" name="durationOfPAP" value={formData.durationOfPAP} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
                   </div>
                 </div>
               )}
