@@ -16,12 +16,12 @@ export default function LabReportForm() {
         if (patientId) {
             axios.get(`http://localhost:3000/user/${patientId}`)
                 .then((response) => {
-                    console(response.data);
+                    console.log(response);
                     const data = response.data.patient;
                     console.log(data);
                     if (data) {
-                        document.getElementById('name').innerText = data.name || 'dds';
-                        document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
+                    document.getElementById('name').innerText = data.name || 'dds';
+                    document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
                     document.getElementById('mrn').innerText = data._id || '';
                     document.getElementById('collectedOn').innerText = data.collectedOn || '';
                     document.getElementById('completedOn').innerText = data.completedOn || '';
