@@ -17,6 +17,10 @@ export default function Dashboard() {
     const navigateToHome = () => {
         router.push('/Dashboard');
     };
+    const Logout = () => {
+        router.push('/');
+    };
+
 
     const handleMakeAppointment = () => {
         router.push('/appointment'); // Replace '/appointment' with the desired route
@@ -35,6 +39,7 @@ export default function Dashboard() {
                         <div onClick={navigateToHome} className="px-4 py-2 cursor-pointer hover:text-white hover:bg-teal-500 rounded-3xl">Home</div>
                         <div onClick={handleNewPatient} className="px-4 py-2 cursor-pointer hover:text-white hover:bg-teal-500 rounded-3xl">New Patient</div>
                         <div onClick={handleDailyUpdates} className="px-4 py-2 cursor-pointer hover:text-white hover:bg-teal-500 rounded-3xl">Daily Updates</div>
+                        <div onClick={Logout} className="px-4 py-2 cursor-pointer hover:text-white hover:bg-teal-500 rounded-3xl">Logout</div>
                     </div>
                 </div>
             </nav>
