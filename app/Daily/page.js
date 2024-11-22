@@ -82,7 +82,7 @@ export default function YesNoForm() {
   const toggleTickCross = (symptom, day) => {
     if (formData.procedure_date && formData.procedure_name) {
       setFormData((prevData) => {
-        const updatedDayValue = 
+        const updatedDayValue =
           prevData.symptoms[symptom]?.[day] === 'tick' ? 'cross' : 'tick';
 
         return {
@@ -128,77 +128,79 @@ export default function YesNoForm() {
   };
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.heading}>Hospital Best Practice Check</h1>
-      <form onSubmit={handleSubmit}>
-        <div style={styles.formGroup}>
-          <label>
-            Date of Procedure:
-            <input
-              type="date"
-              name="procedure_date"
-              value={formData.procedure_date}
-              onChange={(e) => setFormData({ ...formData, procedure_date: e.target.value })}
-              required
-              style={styles.input}
-            />
-          </label>
-          <label>
-            Patient ID:
-            <select
-              name="procedure_name"
-              value={selectedPatient || ''}
-              onChange={(e) => setSelectedPatient(e.target.value)}
-              required
-              style={styles.input}
-            >
-              <option value="" disabled>Select Patient</option>
-              {patients.map((patient) => (
-                <option key={patient.patient_id} value={patient.patient_id}>
-                  {`${patient.name} (ID: ${patient.patient_id})`}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <div style={styles.scrollContainer}>
-          <table style={styles.table}>
-            <thead>
-              <tr>
-                <th style={{ ...styles.tableHeader, width: '300px' }}>Post-op Day</th>
-                {days.map((day) => (
-                  <th key={day} style={styles.tableHeader}>{day}</th>
+    <div className='bg-teal-100 relative'>
+      <div style={styles.container}>
+        <h1 style={styles.heading}>Hospital Best Practice Check</h1>
+        <form onSubmit={handleSubmit}>
+          <div style={styles.formGroup}>
+            <label>
+              Date of Procedure:
+              <input
+                type="date"
+                name="procedure_date"
+                value={formData.procedure_date}
+                onChange={(e) => setFormData({ ...formData, procedure_date: e.target.value })}
+                required
+                style={styles.input}
+              />
+            </label>
+            <label>
+              Patient ID:
+              <select
+                name="procedure_name"
+                value={selectedPatient || ''}
+                onChange={(e) => setSelectedPatient(e.target.value)}
+                required
+                style={styles.input}
+              >
+                <option value="" disabled>Select Patient</option>
+                {patients.map((patient) => (
+                  <option key={patient.patient_id} value={patient.patient_id}>
+                    {`${patient.name} (ID: ${patient.patient_id})`}
+                  </option>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {symptomNames.map((symptom) => (
-                <tr key={symptom}>
-                  <td style={styles.symptomCell}>{symptom}</td>
+              </select>
+            </label>
+          </div>
+
+          <div style={styles.scrollContainer}>
+            <table style={styles.table}>
+              <thead>
+                <tr>
+                  <th style={{ ...styles.tableHeader, width: '300px' }}>Post-op Day</th>
                   {days.map((day) => (
-                    <td key={day} style={styles.tableCell}>
-                      <button
-                        type="button"
-                        onClick={() => toggleTickCross(symptom, day)}
-                        style={{
-                          ...styles.toggleButton,
-                          backgroundColor: formData.symptoms[symptom]?.[day] === 'tick' ? '#28a745' : '#dc3545',
-                          color: 'white',
-                        }}
-                      >
-                        {formData.symptoms[symptom]?.[day] === 'tick' ? '✔️' : '❌'}
-                      </button>
-                    </td>
+                    <th key={day} style={styles.tableHeader}>{day}</th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {symptomNames.map((symptom) => (
+                  <tr key={symptom}>
+                    <td style={styles.symptomCell}>{symptom}</td>
+                    {days.map((day) => (
+                      <td key={day} style={styles.tableCell}>
+                        <button
+                          type="button"
+                          onClick={() => toggleTickCross(symptom, day)}
+                          style={{
+                            ...styles.toggleButton,
+                            backgroundColor: formData.symptoms[symptom]?.[day] === 'tick' ? '#28a745' : '#dc3545',
+                            color: 'white',
+                          }}
+                        >
+                          {formData.symptoms[symptom]?.[day] === 'tick' ? '✔️' : '❌'}
+                        </button>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        <button type="submit" style={styles.submitButton}>Submit</button>
-      </form>
+          <button type="submit" style={styles.submitButton}>Submit</button>
+        </form>
+      </div>
     </div>
   );
 }
