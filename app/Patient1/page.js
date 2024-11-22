@@ -25,9 +25,11 @@ export default function Patient() {
 
   const [formData, setFormData] = useState({
     patientName: '',
-    patientID: '',
     email: '',
     age: '',
+    height: '',
+    weight: '',
+    bmi: '',
     gender: '',
     dateOfAdmission: '',
     dateOfProcedure: '',
@@ -193,6 +195,7 @@ export default function Patient() {
     e.preventDefault();
 
     try {
+      console.log("Request Body:", formData);
       const response = await fetch('http://localhost:3000/general', {
         method: 'POST',
         headers: {
@@ -200,8 +203,11 @@ export default function Patient() {
         },
         body: JSON.stringify({
           name: formData.patientName,
-          patient_id: formData.patientID,
           age: formData.age,
+          email: formData.email,
+          height: height,
+          weight: weight,
+          bmi: bmi,
           gender: formData.gender,
           admission_date: formData.dateOfAdmission,
           discharge_date: formData.dateOfDischarge,
@@ -220,8 +226,9 @@ export default function Patient() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('Login successful:', data);
-        router.push(`/Patient2?patientID=${formData.patientID}`);
+        console.log('Data submitted successfully:', data);
+        console.log('Login successful:', data._id);
+        router.push(`/Patient2?patientID=${data.patient_id}`);
 
       } else {
         console.log('Login failed');
@@ -249,10 +256,7 @@ export default function Patient() {
               </div>
 
               <div className="flex justify-between mb-4">
-                <div className="w-1/2 pr-2">
-                  <label htmlFor="patientID" className="block text-teal-800 font-semibold mb-2">Patient ID:</label>
-                  <input type="text" id="patientID" name="patientID" value={formData.patientID} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
-                </div>
+                
                 <div className="w-1/2 pr-2">
                   <label htmlFor="email" className="block text-teal-800 font-semibold mb-2">Email Id:</label>
                   <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
