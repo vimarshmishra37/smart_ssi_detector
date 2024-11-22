@@ -4,10 +4,32 @@ import { useRouter } from 'next/navigation';
 import html2pdf from 'html2pdf.js';
 import { Suspense } from 'react';
 export default function Patient() {
+
+
+
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [bmi, setBMI] = useState(""); 
+
+
+    const calculateBMI = (height, weight) => 
+    {
+      if (height > 0 && weight > 0) 
+        {
+        const heightInMeters = height / 100;
+        const calculatedBMI = (weight / (heightInMeters ** 2)).toFixed(2); 
+        setBMI(calculatedBMI);
+        } 
+        else 
+        {
+          setBMI(""); 
+        }
+    }
+
   const [formData, setFormData] = useState({
     patientName: '',
     patientID: '',
-    email:'',
+    email: '',
     age: '',
     gender: '',
     dateOfAdmission: '',
@@ -171,233 +193,284 @@ export default function Patient() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
 
     try {
       const response = await fetch('http://localhost:3000/general', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            name: formData.patientName,
-            patient_id: formData.patientID,
-            age: formData.age,
-            gender: formData.gender,
-            admission_date: formData.dateOfAdmission,
-            discharge_date: formData.dateOfDischarge,
-            admittingDepartment: formData.admittingDepartment,
-            procedure_name: formData.procedureName,
-            surgeon: formData.surgeon, 
-            theatre: formData.theatre, 
-            wound_class: formData.woundClass,
-            pap_given: formData.papGiven,
-            antibiotics_given: formData.antibioticsGiven,
-            ssi_event_occurred: formData.ssiEventOccurred,
-            event_date: formData.eventDate,
-            duration_of_pap: formData.durationOfPAP,
+          name: formData.patientName,
+          patient_id: formData.patientID,
+          age: formData.age,
+          gender: formData.gender,
+          admission_date: formData.dateOfAdmission,
+          discharge_date: formData.dateOfDischarge,
+          admittingDepartment: formData.admittingDepartment,
+          procedure_name: formData.procedureName,
+          surgeon: formData.surgeon,
+          theatre: formData.theatre,
+          wound_class: formData.woundClass,
+          pap_given: formData.papGiven,
+          antibiotics_given: formData.antibioticsGiven,
+          ssi_event_occurred: formData.ssiEventOccurred,
+          event_date: formData.eventDate,
+          duration_of_pap: formData.durationOfPAP,
         }),
-    });
+      });
 
-        if (response.ok) {
-            const data = await response.json();
-            console.log('Login successful:', data);
-            router.push(`/Patient2?patientID=${formData.patientID}`);
-           //router.push("/Patient2");
-        } else {
-            console.log('Login failed');
-            const errorData = await response.json();
-            console.error('Login failed:', errorData);
-            alert(errorData.Error || 'Login failed');
-        }
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Login successful:', data);
+        router.push(`/Patient2?patientID=${formData.patientID}`);
+        //router.push("/Patient2");
+      } else {
+        console.log('Login failed');
+        const errorData = await response.json();
+        console.error('Login failed:', errorData);
+        alert(errorData.Error || 'Login failed');
+      }
     } catch (error) {
-        console.log('Network or other error during login is working is :', error);
-        alert('An error occurred while logging in. Please try againwjehcbiqwu.');
+      console.log('Network or other error during login is working is :', error);
+      alert('An error occurred while logging in. Please try againwjehcbiqwu.');
     }
-};
+  };
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-    <>
-      <form onSubmit={handleSubmit} style={styles.container}>
-        <div id="pdfContent">
-          <h2 className="text-xl font-semibold text-center mb-6">Surgical Site Infection Surveillance Form</h2>
-          
-          <div className="mb-4">
-            <label htmlFor="patientName" className="block text-gray-700 font-semibold mb-2">Patient Name:</label>
-            <input type="text" id="patientName" name="patientName" value={formData.patientName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
-          </div>
+      <>
+        <div className='bg-teal-100 text-teal-800'>
+          <form onSubmit={handleSubmit} style={styles.container} className='bg-white'>
+            <div id="pdfContent">
+              <h2 className="text-xl font-semibold text-center mb-6">Surgical Site Infection Surveillance Form</h2>
 
-          <div className="flex justify-between mb-4"> 
-            <div className="w-1/2 pr-2">
-              <label htmlFor="patientID" className="block text-gray-700 font-semibold mb-2">Patient ID:</label>
-              <input type="text" id="patientID" name="patientID" value={formData.patientID} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
+              <div className="mb-4">
+                <label htmlFor="patientName" className="block text-teal-800 font-semibold mb-2">Patient Name:</label>
+                <input type="text" id="patientName" name="patientName" value={formData.patientName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+              </div>
+
+              <div className="flex justify-between mb-4">
+                <div className="w-1/2 pr-2">
+                  <label htmlFor="patientID" className="block text-teal-800 font-semibold mb-2">Patient ID:</label>
+                  <input type="text" id="patientID" name="patientID" value={formData.patientID} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                </div>
+                <div className="w-1/2 pr-2">
+                  <label htmlFor="email" className="block text-teal-800 font-semibold mb-2">Email Id:</label>
+                  <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                </div>
+                <div className="w-1/2 pl-2">
+                  <label htmlFor="age" className="block text-teal-800 font-semibold mb-2">Age:</label>
+                  <input type="text" id="age" name="age" value={formData.age} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                </div>
+              </div>
+
+              <div className="flex justify-between mb-4">
+
+              <div className="w-1/2 pr-2">
+                  <label htmlFor="weight" className="block text-teal-800 font-semibold mb-2">Weight (in kg):</label>
+                  <input type="number" id="weight" name="weight" className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100"
+                    value={weight}
+                    onChange={(e) => {
+                      const newWeight = e.target.value;
+                      setWeight(newWeight);
+                      calculateBMI(height, newWeight); 
+                    }}
+                  />
+                </div>
+
+                <div className="w-1/2 pr-2">
+                  <label htmlFor="height" className="block text-teal-800 font-semibold mb-2">Height (in cm):</label>
+                  <input type="number" id="height" name="height" className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100"
+                    value={height}
+                    onChange={(e) => {
+                      const newHeight = e.target.value;
+                      setHeight(newHeight);
+                      calculateBMI(newHeight, weight); 
+                    }}
+                  />
+                </div>
+
+                <div className="w-1/2 pl-2">
+                  <label htmlFor="bmi" className="block text-teal-800 font-semibold mb-2">BMI:</label>
+                  <input type="text" id="bmi" name="bmi" className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100"
+                    value={bmi}
+                    disabled
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-between mb-4">
+                <div className="w-1/2 pr-2">
+                  <div className="mb-4">
+                    <label htmlFor="gender" className="block text-teal-800 font-semibold mb-2">Gender:</label>
+                    <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100">
+                      <option value="">-- Select Gender --</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="w-1/2 pl-2">
+                  <div className="mb-4">
+                    <label htmlFor="diabetic" className="block text-teal-800 font-semibold mb-2">Diabetic:</label>
+                    <select id="diabetic" name="diabetic" className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100">
+                      <option value="">-- Choose--</option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="flex justify-between mb-4">
+                <div className="w-1/2 pr-2">
+                  <label htmlFor="dateOfAdmission" className="block text-teal-800 font-semibold mb-2">Date of Admission:</label>
+                  <input type="date" id="dateOfAdmission" name="dateOfAdmission" value={formData.dateOfAdmission} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                </div>
+                <div className="w-1/2 pl-2">
+                  <label htmlFor="dateOfProcedure" className="block text-teal-800 font-semibold mb-2">Date of Procedure:</label>
+                  <input type="date" id="dateOfProcedure" name="dateOfProcedure" value={formData.dateOfProcedure} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100 mb-2" />
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="admittingDepartment" className="block text-teal-800 font-semibold mb-2">Admitting Department:</label>
+                <select id="admittingDepartment" name="admittingDepartment" value={formData.admittingDepartment} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100">
+                  <option value="">-- Select Department --</option>
+                  {departments.map((dept, index) => (
+                    <option key={index} value={dept}>{dept}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="procedureName" className="block text-teal-800 font-semibold mb-2">Procedure Name:</label>
+                <select id="procedureName" name="procedureName" value={formData.procedureName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100 mb-2">
+                  <option value="">-- Select Procedure --</option>
+                  {procedures.map((procedure, index) => (
+                    <option key={index} value={procedure}>{procedure}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="surgeon" className="block text-teal-800 font-semibold mb-2">Procedure Done By (Primary Surgeon):</label>
+                <select id="surgeon" name="surgeon" value={formData.surgeon} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100 mb-2">
+                  <option value="">-- Select Surgeon --</option>
+                  {surgeons.map((surgeon, index) => (
+                    <option key={index} value={surgeon}>{surgeon}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label htmlFor="theatre" className="block text-teal-800 font-semibold mb-2">Operation Theatre:</label>
+                <select id="theatre" name="theatre" value={formData.theatre} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100 mb-2">
+                  <option value="">-- Select Theatre --</option>
+                  {operationTheatres.map((theatre, index) => (
+                    <option key={index} value={theatre}>{theatre}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-teal-800 font-semibold mb-2">Wound Class:</label>
+                <div className="flex gap-4">
+                  <label className="inline-flex items-center">
+                    <input type="radio" name="woundClass" value="clean" checked={formData.woundClass === "clean"} onChange={handleChange} className="form-radio text-indigo-600" />
+                    <span className="ml-2">Clean</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <input type="radio" name="woundClass" value="cleanContaminated" checked={formData.woundClass === "cleanContaminated"} onChange={handleChange} className="form-radio text-indigo-600" />
+                    <span className="ml-2">Clean Contaminated</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <input type="radio" name="woundClass" value="contaminated" checked={formData.woundClass === "contaminated"} onChange={handleChange} className="form-radio text-indigo-600" />
+                    <span className="ml-2">Contaminated</span>
+                  </label>
+                  <label className="inline-flex items-center">
+                    <input type="radio" name="woundClass" value="dirtyInfected" checked={formData.woundClass === "dirtyInfected"} onChange={handleChange} className="form-radio text-indigo-600" />
+                    <span className="ml-2">Dirty/Infected</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-teal-800 font-semibold mb-2">SSI Event Occurred:</label>
+                <div className="flex items-center">
+                  <input
+                    type="radio"
+                    id="ssiYes"
+                    name="ssiEventOccurred"
+                    value="yes"
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  <label htmlFor="ssiYes" className="mr-4">Yes</label>
+                  <input
+                    type="radio"
+                    id="ssiNo"
+                    name="ssiEventOccurred"
+                    value="no"
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  <label htmlFor="ssiNo">No</label>
+                </div>
+              </div>
+
+              {formData.ssiEventOccurred === 'yes' && (
+                <div className="mb-4">
+                  <label htmlFor="eventDate" className="block text-teal-800 font-semibold mb-2">If Yes, Date of Event:</label>
+                  <input
+                    type="date"
+                    id="eventDate"
+                    name="eventDate"
+                    value={formData.eventDate}
+                    onChange={handleChange}
+                    className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100"
+                  />
+                </div>
+              )}
+
+
+              <div className="mb-4">
+                <label className="block text-teal-800 font-semibold mb-2">Pre/Peri-operative Antibiotic Prophylaxis (PAP) given:</label>
+                <div className="flex items-center">
+                  <input type="radio" id="papYes" name="papGiven" value="yes" onChange={handleChange} className="mr-2" />
+                  <label htmlFor="papYes" className="mr-4">Yes</label>
+                  <input type="radio" id="papNo" name="papGiven" value="no" onChange={handleChange} className="mr-2" />
+                  <label htmlFor="papNo">No</label>
+                </div>
+              </div>
+
+              {formData.papGiven === 'yes' && (
+                <div className="mb-4">
+                  <div className="mb-2">
+                    <label htmlFor="antibioticsGiven" className="block text-teal-800 font-semibold mb-2">If Yes, Antibiotics Given:</label>
+                    <input type="text" id="antibioticsGiven" name="antibioticsGiven" value={formData.antibioticsGiven} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                  </div>
+                  <div>
+                    <label htmlFor="durationOfPAP" className="block text-teal-800 font-semibold mb-2">Duration of PAP:</label>
+                    <input type="text" id="durationOfPAP" name="durationOfPAP" value={formData.durationOfPAP} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 bg-emerald-100" />
+                  </div>
+                </div>
+              )}
+
             </div>
-            <div className="w-1/2 pr-2">
-              <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">Email Id:</label>
-              <input type="email" id="emil" name="email" value={formData.email} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
+
+            <div className="mt-6 flex justify-between">
+              <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">Next</button>
+              <button type="button" onClick={handleDownloadPDF} className="px-4 py-2 bg-green-500 text-white rounded-md">Download as PDF</button>
             </div>
-            <div className="w-1/2 pl-2">
-              <label htmlFor="age" className="block text-gray-700 font-semibold mb-2">Age:</label>
-              <input type="text" id="age" name="age" value={formData.age} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
-            </div>
-          </div>
-
-          <div className="mb-4">
-        <label htmlFor="gender" className="block text-gray-700 font-semibold mb-2">Gender:</label>
-        <select id="gender" name="gender" value={formData.gender} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12">
-          <option value="">-- Select Gender --</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
-        </select>
-      </div>
-
-      <div className="flex justify-between mb-4">
-        <div className="w-1/2 pr-2">
-          <label htmlFor="dateOfAdmission" className="block text-gray-700 font-semibold mb-2">Date of Admission:</label>
-          <input type="date" id="dateOfAdmission" name="dateOfAdmission" value={formData.dateOfAdmission} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
+          </form>
         </div>
-        <div className="w-1/2 pl-2">
-          <label htmlFor="dateOfProcedure" className="block text-gray-700 font-semibold mb-2">Date of Procedure:</label>
-          <input type="date" id="dateOfProcedure" name="dateOfProcedure" value={formData.dateOfProcedure} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 mb-2" />
-        </div>
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="admittingDepartment" className="block text-gray-700 font-semibold mb-2">Admitting Department:</label>
-        <select id="admittingDepartment" name="admittingDepartment" value={formData.admittingDepartment} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12">
-          <option value="">-- Select Department --</option>
-          {departments.map((dept, index) => (
-            <option key={index} value={dept}>{dept}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="procedureName" className="block text-gray-700 font-semibold mb-2">Procedure Name:</label>
-        <select id="procedureName" name="procedureName" value={formData.procedureName} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 mb-2">
-          <option value="">-- Select Procedure --</option>
-          {procedures.map((procedure, index) => (
-            <option key={index} value={procedure}>{procedure}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="surgeon" className="block text-gray-700 font-semibold mb-2">Procedure Done By (Primary Surgeon):</label>
-        <select id="surgeon" name="surgeon" value={formData.surgeon} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 mb-2">
-          <option value="">-- Select Surgeon --</option>
-          {surgeons.map((surgeon, index) => (
-            <option key={index} value={surgeon}>{surgeon}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="mb-4">
-        <label htmlFor="theatre" className="block text-gray-700 font-semibold mb-2">Operation Theatre:</label>
-        <select id="theatre" name="theatre" value={formData.theatre} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12 mb-2">
-          <option value="">-- Select Theatre --</option>
-          {operationTheatres.map((theatre, index) => (
-            <option key={index} value={theatre}>{theatre}</option>
-          ))}
-        </select>
-      </div>
-
-            <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">Wound Class:</label>
-        <div className="flex gap-4">
-          <label className="inline-flex items-center">
-            <input type="radio" name="woundClass" value="clean" checked={formData.woundClass === "clean"} onChange={handleChange} className="form-radio text-indigo-600" />
-            <span className="ml-2">Clean</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input type="radio" name="woundClass" value="cleanContaminated" checked={formData.woundClass === "cleanContaminated"} onChange={handleChange} className="form-radio text-indigo-600" />
-            <span className="ml-2">Clean Contaminated</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input type="radio" name="woundClass" value="contaminated" checked={formData.woundClass === "contaminated"} onChange={handleChange} className="form-radio text-indigo-600" />
-            <span className="ml-2">Contaminated</span>
-          </label>
-          <label className="inline-flex items-center">
-            <input type="radio" name="woundClass" value="dirtyInfected" checked={formData.woundClass === "dirtyInfected"} onChange={handleChange} className="form-radio text-indigo-600" />
-            <span className="ml-2">Dirty/Infected</span>
-          </label>
-        </div>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">SSI Event Occurred:</label>
-        <div className="flex items-center">
-          <input
-            type="radio"
-            id="ssiYes"
-            name="ssiEventOccurred"
-            value="yes"
-            onChange={handleChange}
-            className="mr-2"
-          />
-          <label htmlFor="ssiYes" className="mr-4">Yes</label>
-          <input
-            type="radio"
-            id="ssiNo"
-            name="ssiEventOccurred"
-            value="no"
-            onChange={handleChange}
-            className="mr-2"
-          />
-          <label htmlFor="ssiNo">No</label>
-        </div>
-      </div>
-
-      {formData.ssiEventOccurred === 'yes' && (
-        <div className="mb-4">
-          <label htmlFor="eventDate" className="block text-gray-700 font-semibold mb-2">If Yes, Date of Event:</label>
-          <input
-            type="date"
-            id="eventDate"
-            name="eventDate"
-            value={formData.eventDate}
-            onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md p-2 h-12"
-          />
-        </div>
-      )}
-
-
-      <div className="mb-4">
-        <label className="block text-gray-700 font-semibold mb-2">Pre/Peri-operative Antibiotic Prophylaxis (PAP) given:</label>
-        <div className="flex items-center">
-          <input type="radio" id="papYes" name="papGiven" value="yes" onChange={handleChange} className="mr-2" />
-          <label htmlFor="papYes" className="mr-4">Yes</label>
-          <input type="radio" id="papNo" name="papGiven" value="no" onChange={handleChange} className="mr-2" />
-          <label htmlFor="papNo">No</label>
-        </div>
-      </div>
-
-      {formData.papGiven === 'yes' && (
-        <div className="mb-4">
-          <div className="mb-2">
-            <label htmlFor="antibioticsGiven" className="block text-gray-700 font-semibold mb-2">If Yes, Antibiotics Given:</label>
-            <input type="text" id="antibioticsGiven" name="antibioticsGiven" value={formData.antibioticsGiven} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
-          </div>
-          <div>
-            <label htmlFor="durationOfPAP" className="block text-gray-700 font-semibold mb-2">Duration of PAP:</label>
-            <input type="text" id="durationOfPAP" name="durationOfPAP" value={formData.durationOfPAP} onChange={handleChange} className="w-full border border-gray-300 rounded-md p-2 h-12" />
-          </div>
-        </div>
-      )}
-
-        </div>
-
-        <div className="mt-6 flex justify-between">
-          <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md">Next</button>
-          <button type="button" onClick={handleDownloadPDF} className="px-4 py-2 bg-green-500 text-white rounded-md">Download as PDF</button>
-        </div>
-      </form>
-      
-    </>
-        </Suspense>
+      </>
+    </Suspense>
   );
 }
 
@@ -405,7 +478,6 @@ const styles = {
   container: {
     width: '75%',
     margin: '0 auto',
-    backgroundColor: '#f3f4f6',
     padding: '1.5rem',
     borderRadius: '0.5rem',
     boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
