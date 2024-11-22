@@ -20,8 +20,8 @@ export default function LabReportForm() {
                     const data = response.data.patient;
                     console.log(data);
                     if (data) {
-                    document.getElementById('name').innerText = data.name || 'dds';
-                    document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
+                        document.getElementById('name').innerText = data.name || 'dds';
+                        document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
                     document.getElementById('mrn').innerText = data._id || '';
                     document.getElementById('collectedOn').innerText = data.collectedOn || '';
                     document.getElementById('completedOn').innerText = data.completedOn || '';
@@ -41,7 +41,7 @@ export default function LabReportForm() {
                 });
         }
     }, [patientId, setValue]);
-    
+
 
     const onSubmit = (data) => {
         console.log('Form submitted with:', data);
@@ -70,131 +70,133 @@ export default function LabReportForm() {
     };
 
     return (
-        <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
-            <h1 className='text-4xl font-extrabold text-center'>Department of Laboratory Medicine - Microbiology</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
+        <div className='bg-teal-100 text-teal-800'>
+            <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
+                <h1 className='text-4xl font-extrabold text-center'>Department of Laboratory Medicine - Microbiology</h1>
+                <form onSubmit={handleSubmit(onSubmit)}>
 
-                {/* Patient Details Table */}
-                <h2 className="text-xl font-semibold mt-4">Patient Information</h2>
-                <table className="w-full mt-4 border border-gray-300">
-                    <tbody>
-                        <tr>
-                            <td className="border px-4 py-2"><span className="font-bold">Name:</span></td>
-                            <td className="border px-4 py-2"><span id="name"></span></td>
-                            <td className="border px-4 py-2"><span className="font-bold">Department:</span></td>
-                            <td className="border px-4 py-2"><span id="dept">G1 & Hepato-Pancreatico-Biliary Surgery</span></td>
-                        </tr>
-                        <tr>
-                            <td className="border px-4 py-2"><span className="font-bold">Age/Sex:</span></td>
-                            <td className="border px-4 py-2"><span id="ageSex">25/M</span></td>
-                            <td className="border px-4 py-2"><span className="font-bold">Consulting Doctor:</span></td>
-                            <td className="border px-4 py-2"><span id="docname">Dr Smith Mathew</span></td>
-                        </tr>
-                        <tr>
-                            <td className="border px-4 py-2"><span className="font-bold">MRN:</span></td>
-                            <td className="border px-4 py-2"><span id="mrn">123456789</span></td>
-                            <td className="border px-4 py-2"><span className="font-bold">Specimen Collected On:</span></td>
-                            <td className="border px-4 py-2"><span id="collectedOn">2024-10-01</span></td>
-                        </tr>
-                        <tr>
-                            <td className="border px-4 py-2"><span className="font-bold">Visit Type:</span></td>
-                            <td className="border px-4 py-2"><span id="visitType">IP</span></td>
-                            <td className="border px-4 py-2"><span className="font-bold">Specimen Recieved On:</span></td>
-                            <td className="border px-4 py-2"><span id="recievedOn">2024-10-03</span></td>
-                        </tr>
-                        <tr>
-                            <td className="border px-4 py-2"><span className="font-bold">Sample No:</span></td>
-                            <td className="border px-4 py-2"><span id="sampleNo">32112</span></td>
-                            <td className="border px-4 py-2"><span className="font-bold">Specimen Completed On:</span></td>
-                            <td className="border px-4 py-2"><span id="completedOn">2024-10-05</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-
-                {/* Test and Sample Information Table */}
-                <h2 className="text-xl font-semibold mt-4">Test and Sample Information</h2>
-                <table className="w-full mt-4">
-                    <tbody>
-                        <tr>
-                            <td className="font-bold">Test Name:</td>
-                            <td><span id="testName">AEROBIC C & S</span></td>
-                        </tr>
-                        <tr>
-                            <td className="font-bold">Incubation Period:</td>
-                            <td><span id="incubPeriod">36-48 hrs</span></td>
-                        </tr>
-                        <tr>
-                            <td className="font-bold">Remarks:</td>
-                            <td><span id="remarks">Escherichia coli grown in culture. Sample type: Pus swab from Abdomen.</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                {/* Identifications Table */}
-                <h2 className="text-xl font-semibold mt-4">Identifications</h2>
-                <table className="w-full mt-4 border-collapse border border-gray-300">
-                    <thead className="bg-gray-400">
-                        <tr>
-                            <th className="text-left px-4 py-2 border">S No.</th>
-                            <th className="text-left px-4 py-2 border">Organism Isolated</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td className="w-2/12 font-medium text-left px-4 py-2 border"><span>1</span></td>
-                            <td className="text-left px-4 py-2 border"><span>Escherichia coli</span></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                {/* Antibiotic Susceptibility Table */}
-                <h2 className="text-xl font-semibold mt-4">Antibiotic Susceptibility</h2>
-                <table className="w-full mt-4 table-auto border-collapse border border-gray-300">
-                    <thead className="bg-gray-400">
-                        <tr>
-                            <th className="text-left px-4 py-2 border">Antibiotic</th>
-                            <th className="text-left px-4 py-2 border">MIC</th>
-                            <th className="text-left px-4 py-2 border">Interpretation</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {['Cefuroxime', 'Ceftriaxone', 'Cefazidime', 'Cefepime', 'Amoxicillin/Clavulanic acid', 'Piperacillin/Tazobactam', 'Cefoperazone/Sulbactam', 'Gentamicin', 'Amikacin', 'Netilmicin', 'Ciprofloxacin', 'Levofloxacin', 'Trimethoprim/Sulfamethoxazole'].map((antibiotic, index) => (
-                            <tr key={index}>
-                                <td className="px-4 py-2 border">{antibiotic}</td>
-                                <td className="px-4 py-2 border"><span id={`mic_${antibiotic}`}>0.5</span></td>
-                                <td className="px-4 py-2 border"><span id={`interpretation_${antibiotic}`}>Susceptible</span></td>
+                    {/* Patient Details Table */}
+                    <h2 className="text-xl font-semibold mt-4">Patient Information</h2>
+                    <table className="w-full mt-4 border border-gray-300">
+                        <tbody>
+                            <tr>
+                                <td className="border px-4 py-2"><span className="font-bold">Name:</span></td>
+                                <td className="border px-4 py-2"><span id="name"></span></td>
+                                <td className="border px-4 py-2"><span className="font-bold">Department:</span></td>
+                                <td className="border px-4 py-2"><span id="dept">G1 & Hepato-Pancreatico-Biliary Surgery</span></td>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                            <tr>
+                                <td className="border px-4 py-2"><span className="font-bold">Age/Sex:</span></td>
+                                <td className="border px-4 py-2"><span id="ageSex">25/M</span></td>
+                                <td className="border px-4 py-2"><span className="font-bold">Consulting Doctor:</span></td>
+                                <td className="border px-4 py-2"><span id="docname">Dr Smith Mathew</span></td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2"><span className="font-bold">MRN:</span></td>
+                                <td className="border px-4 py-2"><span id="mrn">123456789</span></td>
+                                <td className="border px-4 py-2"><span className="font-bold">Specimen Collected On:</span></td>
+                                <td className="border px-4 py-2"><span id="collectedOn">2024-10-01</span></td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2"><span className="font-bold">Visit Type:</span></td>
+                                <td className="border px-4 py-2"><span id="visitType">IP</span></td>
+                                <td className="border px-4 py-2"><span className="font-bold">Specimen Recieved On:</span></td>
+                                <td className="border px-4 py-2"><span id="recievedOn">2024-10-03</span></td>
+                            </tr>
+                            <tr>
+                                <td className="border px-4 py-2"><span className="font-bold">Sample No:</span></td>
+                                <td className="border px-4 py-2"><span id="sampleNo">32112</span></td>
+                                <td className="border px-4 py-2"><span className="font-bold">Specimen Completed On:</span></td>
+                                <td className="border px-4 py-2"><span id="completedOn">2024-10-05</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                {/* Comments Section */}
-                <h2 className="text-xl font-semibold mt-4">Comments</h2>
-                <textarea
-                    id="comments"
-                    rows="4"
-                    className="w-full p-2 mt-2 border rounded-md"
-                    placeholder="Enter comments here"
-                ></textarea>
 
-                {/* Buttons */}
-                <div className="mt-6">
-                    <button
-                        onClick={generatePDF}
-                        className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
-                    >
-                        Generate PDF
-                    </button>
-                    <button
-                        type="button"
-                        onClick={handleFormSubmit}
-                        className="mt-4 w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
-                    >
-                        Submit
-                    </button>
-                </div>
-            </form>
+                    {/* Test and Sample Information Table */}
+                    <h2 className="text-xl font-semibold mt-4">Test and Sample Information</h2>
+                    <table className="w-full mt-4">
+                        <tbody>
+                            <tr>
+                                <td className="font-bold">Test Name:</td>
+                                <td><span id="testName">AEROBIC C & S</span></td>
+                            </tr>
+                            <tr>
+                                <td className="font-bold">Incubation Period:</td>
+                                <td><span id="incubPeriod">36-48 hrs</span></td>
+                            </tr>
+                            <tr>
+                                <td className="font-bold">Remarks:</td>
+                                <td><span id="remarks">Escherichia coli grown in culture. Sample type: Pus swab from Abdomen.</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {/* Identifications Table */}
+                    <h2 className="text-xl font-semibold mt-4">Identifications</h2>
+                    <table className="w-full mt-4 border-collapse border border-gray-300">
+                        <thead className="bg-gray-400">
+                            <tr>
+                                <th className="text-left px-4 py-2 border">S No.</th>
+                                <th className="text-left px-4 py-2 border">Organism Isolated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="w-2/12 font-medium text-left px-4 py-2 border"><span>1</span></td>
+                                <td className="text-left px-4 py-2 border"><span>Escherichia coli</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    {/* Antibiotic Susceptibility Table */}
+                    <h2 className="text-xl font-semibold mt-4">Antibiotic Susceptibility</h2>
+                    <table className="w-full mt-4 table-auto border-collapse border border-gray-300">
+                        <thead className="bg-gray-400">
+                            <tr>
+                                <th className="text-left px-4 py-2 border">Antibiotic</th>
+                                <th className="text-left px-4 py-2 border">MIC</th>
+                                <th className="text-left px-4 py-2 border">Interpretation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {['Cefuroxime', 'Ceftriaxone', 'Cefazidime', 'Cefepime', 'Amoxicillin/Clavulanic acid', 'Piperacillin/Tazobactam', 'Cefoperazone/Sulbactam', 'Gentamicin', 'Amikacin', 'Netilmicin', 'Ciprofloxacin', 'Levofloxacin', 'Trimethoprim/Sulfamethoxazole'].map((antibiotic, index) => (
+                                <tr key={index}>
+                                    <td className="px-4 py-2 border">{antibiotic}</td>
+                                    <td className="px-4 py-2 border"><span id={`mic_${antibiotic}`}>0.5</span></td>
+                                    <td className="px-4 py-2 border"><span id={`interpretation_${antibiotic}`}>Susceptible</span></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    {/* Comments Section */}
+                    <h2 className="text-xl font-semibold mt-4">Comments</h2>
+                    <textarea
+                        id="comments"
+                        rows="4"
+                        className="w-full p-2 mt-2 border rounded-md"
+                        placeholder="Enter comments here"
+                    ></textarea>
+
+                    {/* Buttons */}
+                    <div className="mt-6">
+                        <button
+                            onClick={generatePDF}
+                            className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+                        >
+                            Generate PDF
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleFormSubmit}
+                            className="mt-4 w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600"
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }
