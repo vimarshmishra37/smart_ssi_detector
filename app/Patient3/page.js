@@ -105,7 +105,7 @@ export default function AntibioticSurveillanceForm() {
                           name="name"
                           value={row.name}
                           onChange={(e) => handleChange(e, index, 'priorAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Antibiotic</option>
                           {antibiotics.map((antibiotic, idx) => (
@@ -118,7 +118,7 @@ export default function AntibioticSurveillanceForm() {
                           name="route"
                           value={row.route}
                           onChange={(e) => handleChange(e, index, 'priorAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Route</option>
                           {routes.map((route, idx) => (
@@ -133,7 +133,7 @@ export default function AntibioticSurveillanceForm() {
                           placeholder="Duration"
                           value={row.duration}
                           onChange={(e) => handleChange(e, index, 'priorAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         />
                       </td>
                       <td className="border border-gray-300 p-2">
@@ -141,7 +141,7 @@ export default function AntibioticSurveillanceForm() {
                           name="doses"
                           value={row.doses}
                           onChange={(e) => handleChange(e, index, 'priorAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Doses</option>
                           {doses.map((dose, idx) => (
@@ -182,7 +182,7 @@ export default function AntibioticSurveillanceForm() {
                           name="name"
                           value={row.name}
                           onChange={(e) => handleChange(e, index, 'prePeriAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Antibiotic</option>
                           {antibiotics.map((antibiotic, idx) => (
@@ -195,7 +195,7 @@ export default function AntibioticSurveillanceForm() {
                           name="route"
                           value={row.route}
                           onChange={(e) => handleChange(e, index, 'prePeriAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Route</option>
                           {routes.map((route, idx) => (
@@ -210,7 +210,7 @@ export default function AntibioticSurveillanceForm() {
                           placeholder="Duration"
                           value={row.duration}
                           onChange={(e) => handleChange(e, index, 'prePeriAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         />
                       </td>
                       <td className="border border-gray-300 p-2">
@@ -218,7 +218,7 @@ export default function AntibioticSurveillanceForm() {
                           name="doses"
                           value={row.doses}
                           onChange={(e) => handleChange(e, index, 'prePeriAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Doses</option>
                           {doses.map((dose, idx) => (
@@ -259,7 +259,7 @@ export default function AntibioticSurveillanceForm() {
                           name="name"
                           value={row.name}
                           onChange={(e) => handleChange(e, index, 'postAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Antibiotic</option>
                           {antibiotics.map((antibiotic, idx) => (
@@ -272,7 +272,7 @@ export default function AntibioticSurveillanceForm() {
                           name="route"
                           value={row.route}
                           onChange={(e) => handleChange(e, index, 'postAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Route</option>
                           {routes.map((route, idx) => (
@@ -287,7 +287,7 @@ export default function AntibioticSurveillanceForm() {
                           placeholder="Duration"
                           value={row.duration}
                           onChange={(e) => handleChange(e, index, 'postAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         />
                       </td>
                       <td className="border border-gray-300 p-2">
@@ -295,7 +295,7 @@ export default function AntibioticSurveillanceForm() {
                           name="doses"
                           value={row.doses}
                           onChange={(e) => handleChange(e, index, 'postAntibiotics')}
-                          className="w-full border border-gray-300 rounded-md p-2"
+                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                         >
                           <option value="">Select Doses</option>
                           {doses.map((dose, idx) => (
@@ -327,7 +327,7 @@ export default function AntibioticSurveillanceForm() {
                     name="induction"
                     value={formData.times.induction}
                     onChange={(e) => setFormData({ ...formData, times: { ...formData.times, induction: e.target.value } })}
-                    className="w-full border border-gray-300 rounded-md p-2"
+                    className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                   />
                 </div>
                 <div>
@@ -338,7 +338,7 @@ export default function AntibioticSurveillanceForm() {
                     name="incision"
                     value={formData.times.incision}
                     onChange={(e) => setFormData({ ...formData, times: { ...formData.times, incision: e.target.value } })}
-                    className="w-full border border-gray-300 rounded-md p-2"
+                    className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                   />
                 </div>
                 <div>
@@ -349,7 +349,7 @@ export default function AntibioticSurveillanceForm() {
                     name="surgeryEnd"
                     value={formData.times.surgeryEnd}
                     onChange={(e) => setFormData({ ...formData, times: { ...formData.times, surgeryEnd: e.target.value } })}
-                    className="w-full border border-gray-300 rounded-md p-2"
+                    className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
                   />
                 </div>
               </div>
