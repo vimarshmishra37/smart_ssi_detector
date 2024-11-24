@@ -133,18 +133,22 @@ export default function LabReportForm() {
                     </table>
 
                     {/* Identifications Table */}
-                    <h2 className="text-xl font-semibold mt-4">Identifications</h2>
+                    <h2 className="text-xl font-semibold mt-4">Possible Identifications</h2>
                     <table className="w-full mt-4 border-collapse border border-gray-300">
                         <thead className="bg-gray-400">
                             <tr>
                                 <th className="text-left px-4 py-2 border">S No.</th>
-                                <th className="text-left px-4 py-2 border">Organism Isolated</th>
+                                <th className="text-left px-4 py-2 border">Infection Details</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td className="w-2/12 font-medium text-left px-4 py-2 border"><span>1</span></td>
-                                <td className="text-left px-4 py-2 border"><span>Escherichia coli</span></td>
+                                <td className="w-2/12 font-medium text-left px-4 py-2 border"><span>1(Random Forest)</span></td>
+                                <td className="text-left px-4 py-2 border"><span>Surgical Site Infection</span></td>
+                            </tr>
+                            <tr>
+                                <td className="w-2/12 font-medium text-left px-4 py-2 border"><span>2(XGboost)</span></td>
+                                <td className="text-left px-4 py-2 border"><span>Surgical Site Infection</span></td>
                             </tr>
                         </tbody>
                     </table>
