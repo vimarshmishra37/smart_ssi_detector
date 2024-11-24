@@ -72,7 +72,7 @@ export default function Page() {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost:3000/antibiotic', {
+      const response = await fetch('http://localhost:3001/antibiotic', {
         method: 'POST', // or 'PUT' if updating
         headers: {
           'Content-Type': 'application/json',
@@ -92,34 +92,40 @@ export default function Page() {
     }
   };
 
+  const styles = {
+    container: 'my-8 max-w-4xl mx-auto bg-white p-8 rounded-md shadow-2xl border border-teal-400/50',
+    header: 'text-2xl font-bold text-center text-[#2C7A7B] mb-8 uppercase tracking-wide',
+    formSection: 'mb-6',
+    label: 'block text-sm font-semibold text-teal-400 mb-2 tracking-wider',
+    select: 'w-full px-4 py-2 border border-teal-400/50 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#2C7A7B]',
+    table: 'min-w-full border-translate rounded-lg overflow-hidden',
+    tableHeader: ' text-teal-700 px-4 py-2 text-left font-semibold',
+    tableCell: 'p-2',
+    addButton: 'mt-2 bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition duration-300',
+    deleteButton: 'bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition duration-300',
+    submitButton: 'w-full bg-[#2C7A7B] text-white font-semibold py-3 rounded-lg hover:bg-[#276e6f] transition duration-300'
+  };
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-    <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
-      <div className='bg-teal-100 text-teal-800' style={{ height: '100vh' }}>
-        <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md ">
+    <div className={styles.container}>
 
-      <h1 className="text-2xl font-bold mb-4">Antibiotic Susceptibility Form</h1>
-          <h1 className="text-2xl font-bold mb-4">Antibiotic Susceptibility Form</h1>
+      <h1 className={styles.header}>Antibiotic Susceptibility Form</h1>
 
-      <form onSubmit={handleSubmit} method='POST' action='http://localhost:3000/antibiotic' >
+      <form onSubmit={handleSubmit} method='POST' action='http://localhost:3001/antibiotic' >
         {/* Micro-organisms Section */}
-        <div className="mb-4">
-          <h2 className="text-lg font-semibold mb-2">Micro-organisms:</h2>
-          <form onSubmit={handleSubmit} method='POST' action='http://localhost:3000/antibiotic' >
-            {/* Micro-organisms Section */}
-            <div className="mb-4">
-              <h2 className="text-lg font-semibold mb-2">Micro-organisms:</h2>
+        <div className={styles.formSection}>
+          <h2 className={styles.label}>Micro-organisms:</h2>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label htmlFor="organism1" className="block text-gray-700 mb-2">Organism 1</label>
+              <label htmlFor="organism1" className={styles.label}>Organism 1</label>
               <select
                 id="organism1"
                 name="organism1"
                 value={formData.organism1}
                 onChange={(e) => setFormData({ ...formData, organism1: e.target.value })}
-                className="w-full border border-gray-300 rounded-md p-2"
+                className={styles.select}
               >
                 <option value="">Select an organism</option>
                 {microorganisms.map((microorganism, index) => (
@@ -128,128 +134,15 @@ export default function Page() {
                   </option>
                 ))}
               </select>
-              <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label htmlFor="organism1" className="block text-gray-700 mb-2">Organism 1</label>
-                  <select
-                    id="organism1"
-                    name="organism1"
-                    value={formData.organism1}
-                    onChange={(e) => setFormData({ ...formData, organism1: e.target.value })}
-                    className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
-                  >
-                    <option value="">Select an organism</option>
-                    {microorganisms.map((microorganism, index) => (
-                      <option key={index} value={microorganism}>
-                        {microorganism}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="organism2" className="block text-gray-700 mb-2">Organism 2</label>
-                  <select
-                    id="organism2"
-                    name="organism2"
-                    value={formData.organism2}
-                    onChange={(e) => setFormData({ ...formData, organism2: e.target.value })}
-                    className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
-                  >
-                    <option value="">Select an organism</option>
-                    {microorganisms.map((microorganism, index) => (
-                      <option key={index} value={microorganism}>
-                        {microorganism}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
             </div>
             <div>
-              <label htmlFor="organism2" className="block text-gray-700 mb-2">Organism 2</label>
+              <label htmlFor="organism2" className={styles.label}>Organism 2</label>
               <select
                 id="organism2"
                 name="organism2"
                 value={formData.organism2}
                 onChange={(e) => setFormData({ ...formData, organism2: e.target.value })}
-                className="w-full border border-gray-300 rounded-md p-2"
-            {/* Antibiotic Susceptibility Table for Isolate 1 */}
-            <div className="mt-4">
-              <h2 className="text-lg font-semibold mb-2">Isolate 1 (Antibiotic Susceptibility Pattern)</h2>
-              <table className="min-w-full table-auto border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-gray-300 p-2">Sensitive</th>
-                    <th className="border border-gray-300 p-2">Resistant</th>
-                    <th className="border border-gray-300 p-2">Intermediate</th>
-                    <th className="border border-gray-300 p-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {formData.isolate1.map((row, index) => (
-                    <tr key={index}>
-                      <td className="border border-gray-300 p-2">
-                        <select
-                          name="sensitive"
-                          value={row.sensitive}
-                          onChange={(e) => handleChange(e, index, 'isolate1')}
-                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
-                        >
-                          <option value="">Select Antibiotic</option>
-                          {antibiotics.map((antibiotic) => (
-                            <option key={antibiotic} value={antibiotic}>
-                              {antibiotic}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        <select
-                          name="resistant"
-                          value={row.resistant}
-                          onChange={(e) => handleChange(e, index, 'isolate1')}
-                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
-                        >
-                          <option value="">Select Antibiotic</option>
-                          {antibiotics.map((antibiotic) => (
-                            <option key={antibiotic} value={antibiotic}>
-                              {antibiotic}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        <select
-                          name="intermediate"
-                          value={row.intermediate}
-                          onChange={(e) => handleChange(e, index, 'isolate1')}
-                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
-                        >
-                          <option value="">Select Antibiotic</option>
-                          {antibiotics.map((antibiotic) => (
-                            <option key={antibiotic} value={antibiotic}>
-                              {antibiotic}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="border border-gray-300 p-2 text-center">
-                        <button
-                          onClick={() => removeRow('isolate1', index)}
-                          type="button"
-                          className="bg-red-500 text-white px-2 py-1 rounded-md"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <button
-                onClick={() => addRow('isolate1')}
-                type="button"
-                className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
+                className={styles.select}
               >
                 <option value="">Select an organism</option>
                 {microorganisms.map((microorganism, index) => (
@@ -258,32 +151,31 @@ export default function Page() {
                   </option>
                 ))}
               </select>
-                Add Row for Isolate 1
-              </button>
             </div>
           </div>
         </div>
+
         {/* Antibiotic Susceptibility Table for Isolate 1 */}
         <div className="mt-4">
-          <h2 className="text-lg font-semibold mb-2">Isolate 1 (Antibiotic Susceptibility Pattern)</h2>
-          <table className="min-w-full table-auto border-collapse border border-gray-300">
+          <h2 className={styles.label}>Isolate 1 (Antibiotic Susceptibility Pattern)</h2>
+          <table className={styles.table}>
             <thead>
-              <tr className="bg-gray-100">
-                <th className="border border-gray-300 p-2">Sensitive</th>
-                <th className="border border-gray-300 p-2">Resistant</th>
-                <th className="border border-gray-300 p-2">Intermediate</th>
-                <th className="border border-gray-300 p-2">Actions</th>
+              <tr className={styles.tableHeader}>
+                <th className={styles.tableCell}>Sensitive</th>
+                <th className={styles.tableCell}>Resistant</th>
+                <th className={styles.tableCell}>Intermediate</th>
+                <th className={styles.tableCell}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {formData.isolate1.map((row, index) => (
                 <tr key={index}>
-                  <td className="border border-gray-300 p-2">
+                  <td className={styles.tableCell}>
                     <select
                       name="sensitive"
                       value={row.sensitive}
                       onChange={(e) => handleChange(e, index, 'isolate1')}
-                      className="w-full border border-gray-300 rounded-md p-2"
+                      className={styles.select}
                     >
                       <option value="">Select Antibiotic</option>
                       {antibiotics.map((antibiotic) => (
@@ -293,12 +185,12 @@ export default function Page() {
                       ))}
                     </select>
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className={styles.tableCell}>
                     <select
                       name="resistant"
                       value={row.resistant}
                       onChange={(e) => handleChange(e, index, 'isolate1')}
-                      className="w-full border border-gray-300 rounded-md p-2"
+                      className={styles.select}
                     >
                       <option value="">Select Antibiotic</option>
                       {antibiotics.map((antibiotic) => (
@@ -308,12 +200,12 @@ export default function Page() {
                       ))}
                     </select>
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className={styles.tableCell}>
                     <select
                       name="intermediate"
                       value={row.intermediate}
                       onChange={(e) => handleChange(e, index, 'isolate1')}
-                      className="w-full border border-gray-300 rounded-md p-2"
+                      className={styles.select}
                     >
                       <option value="">Select Antibiotic</option>
                       {antibiotics.map((antibiotic) => (
@@ -323,11 +215,11 @@ export default function Page() {
                       ))}
                     </select>
                   </td>
-                  <td className="border border-gray-300 p-2 text-center">
+                  <td className={styles.tableCell}>
                     <button
                       onClick={() => removeRow('isolate1', index)}
                       type="button"
-                      className="bg-red-500 text-white px-2 py-1 rounded-md"
+                      className={styles.deleteButton}
                     >
                       Delete
                     </button>
@@ -339,7 +231,7 @@ export default function Page() {
           <button
             onClick={() => addRow('isolate1')}
             type="button"
-            className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
+            className={styles.addButton}
           >
             Add Row for Isolate 1
           </button>
@@ -347,25 +239,25 @@ export default function Page() {
 
         {/* Antibiotic Susceptibility Table for Isolate 2 */}
         <div className="mt-6">
-          <h2 className="text-lg font-semibold mb-2">Isolate 2 (Antibiotic Susceptibility Pattern)</h2>
-          <table className="min-w-full table-auto border-collapse border border-gray-300">
+          <h2 className={styles.label}>Isolate 2 (Antibiotic Susceptibility Pattern)</h2>
+          <table className={styles.table}>
             <thead>
-              <tr className="bg-gray-100">
-                <th className="border border-gray-300 p-2">Sensitive</th>
-                <th className="border border-gray-300 p-2">Resistant</th>
-                <th className="border border-gray-300 p-2">Intermediate</th>
-                <th className="border border-gray-300 p-2">Actions</th>
+              <tr className={styles.tableHeader}>
+                <th className={styles.tableCell}>Sensitive</th>
+                <th className={styles.tableCell}>Resistant</th>
+                <th className={styles.tableCell}>Intermediate</th>
+                <th className={styles.tableCell}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {formData.isolate2.map((row, index) => (
                 <tr key={index}>
-                  <td className="border border-gray-300 p-2">
+                  <td className={styles.tableCell}>
                     <select
                       name="sensitive"
                       value={row.sensitive}
                       onChange={(e) => handleChange(e, index, 'isolate2')}
-                      className="w-full border border-gray-300 rounded-md p-2"
+                      className={styles.select}
                     >
                       <option value="">Select Antibiotic</option>
                       {antibiotics.map((antibiotic) => (
@@ -375,12 +267,12 @@ export default function Page() {
                       ))}
                     </select>
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className={styles.tableCell}>
                     <select
                       name="resistant"
                       value={row.resistant}
                       onChange={(e) => handleChange(e, index, 'isolate2')}
-                      className="w-full border border-gray-300 rounded-md p-2"
+                      className={styles.select}
                     >
                       <option value="">Select Antibiotic</option>
                       {antibiotics.map((antibiotic) => (
@@ -390,12 +282,12 @@ export default function Page() {
                       ))}
                     </select>
                   </td>
-                  <td className="border border-gray-300 p-2">
+                  <td className={styles.tableCell}>
                     <select
                       name="intermediate"
                       value={row.intermediate}
                       onChange={(e) => handleChange(e, index, 'isolate2')}
-                      className="w-full border border-gray-300 rounded-md p-2"
+                      className={styles.select}
                     >
                       <option value="">Select Antibiotic</option>
                       {antibiotics.map((antibiotic) => (
@@ -405,11 +297,11 @@ export default function Page() {
                       ))}
                     </select>
                   </td>
-                  <td className="border border-gray-300 p-2 text-center">
+                  <td className={styles.tableCell}>
                     <button
                       onClick={() => removeRow('isolate2', index)}
                       type="button"
-                      className="bg-red-500 text-white px-2 py-1 rounded-md"
+                      className={styles.deleteButton}
                     >
                       Delete
                     </button>
@@ -421,105 +313,18 @@ export default function Page() {
           <button
             onClick={() => addRow('isolate2')}
             type="button"
-            className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
+            className={styles.addButton}
           >
             Add Row for Isolate  2
           </button>
         </div>
-            {/* Antibiotic Susceptibility Table for Isolate 2 */}
-            <div className="mt-6">
-              <h2 className="text-lg font-semibold mb-2">Isolate 2 (Antibiotic Susceptibility Pattern)</h2>
-              <table className="min-w-full table-auto border-collapse border border-gray-300">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border border-gray-300 p-2">Sensitive</th>
-                    <th className="border border-gray-300 p-2">Resistant</th>
-                    <th className="border border-gray-300 p-2">Intermediate</th>
-                    <th className="border border-gray-300 p-2">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {formData.isolate2.map((row, index) => (
-                    <tr key={index}>
-                      <td className="border border-gray-300 p-2">
-                        <select
-                          name="sensitive"
-                          value={row.sensitive}
-                          onChange={(e) => handleChange(e, index, 'isolate2')}
-                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
-                        >
-                          <option value="">Select Antibiotic</option>
-                          {antibiotics.map((antibiotic) => (
-                            <option key={antibiotic} value={antibiotic}>
-                              {antibiotic}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        <select
-                          name="resistant"
-                          value={row.resistant}
-                          onChange={(e) => handleChange(e, index, 'isolate2')}
-                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
-                        >
-                          <option value="">Select Antibiotic</option>
-                          {antibiotics.map((antibiotic) => (
-                            <option key={antibiotic} value={antibiotic}>
-                              {antibiotic}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="border border-gray-300 p-2">
-                        <select
-                          name="intermediate"
-                          value={row.intermediate}
-                          onChange={(e) => handleChange(e, index, 'isolate2')}
-                          className="w-full border border-teal-800 rounded-md p-2 bg-emerald-100"
-                        >
-                          <option value="">Select Antibiotic</option>
-                          {antibiotics.map((antibiotic) => (
-                            <option key={antibiotic} value={antibiotic}>
-                              {antibiotic}
-                            </option>
-                          ))}
-                        </select>
-                      </td>
-                      <td className="border border-gray-300 p-2 text-center">
-                        <button
-                          onClick={() => removeRow('isolate2', index)}
-                          type="button"
-                          className="bg-red-500 text-white px-2 py-1 rounded-md"
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <button
-                onClick={() => addRow('isolate2')}
-                type="button"
-                className="mt-2 bg-green-500 text-white px-4 py-2 rounded-md"
-              >
-                Add Row for Isolate  2
-              </button>
-            </div>
 
         {/* Submit Button */}
         <div className="mt-6">
-          <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Next</button>
-            {/* Submit Button */}
-            <div className="mt-6">
-              <button type="submit" className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600">Next</button>
-            </div>
-          </form>
+          <button type="submit" className={styles.submitButton}>Next</button>
         </div>
       </form>
     </div>
-      </div>
     </Suspense>
   );
 }
