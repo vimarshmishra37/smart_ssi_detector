@@ -31,6 +31,8 @@ export default function LabReportForm() {
                         document.getElementById('sampleNo').innerText = data.patient_id || '';
                         document.getElementById('testName').innerText = data.procedure_name || '';
                         document.getElementById('comments').innerText = data.comments || '';
+                        console.log(response.data.prediction);
+                        document.getElementById('type').innerText=response.data.prediction.prediction;
                         const inductionTime = data.induction; 
                         const surgeryEndTime = data.surgeryEnd; 
 
