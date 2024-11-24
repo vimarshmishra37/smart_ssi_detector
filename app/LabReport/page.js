@@ -31,17 +31,22 @@ export default function LabReportForm() {
                         document.getElementById('sampleNo').innerText = data.patient_id || '';
                         document.getElementById('testName').innerText = data.procedure_name || '';
                         document.getElementById('comments').innerText = data.comments || '';
-                        const inductionTime = data.induction; 
-                        const surgeryEndTime = data.surgeryEnd; 
-
-                        if (inductionTime && surgeryEndTime) {
-                            const inductionDate = new Date(`1970-01-01T${inductionTime}:00`);
+                        if (data?.times?.induction && data?.times?.surgeryEnd) {
+                            const inductionTime = data.times.induction.trim();
+                            const surgeryEndTime = data.times.surgeryEnd.trim();
+                            const inductionDate = new Date(`1970-01-01T${inductionTime}:00`); 
                             const surgeryEndDate = new Date(`1970-01-01T${surgeryEndTime}:00`);
+                            if (isNaN(inductionDate) || isNaN(surgeryEndDate)) {
+                                console.error("Invalid date format:", inductionTime, surgeryEndTime);
+                                return;
+                            }
                             const diffInMs = surgeryEndDate - inductionDate;
                             const adjustedDiffInMs = diffInMs >= 0 ? diffInMs : diffInMs + 24 * 60 * 60 * 1000;
                             const diffInHours = adjustedDiffInMs / (1000 * 60 * 60);
                             setIncubPeriod(`${Math.round(diffInHours)} hrs`);
                         }
+                        
+                        
 
                     }
                 })
