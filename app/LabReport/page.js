@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { jsPDF } from 'jspdf';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -11,7 +11,7 @@ export default function LabReportForm() {
     const router = useRouter();
 
     const { register, handleSubmit, formState: { errors }, setValue } = useForm();
-
+    const [incubPeriod, setIncubPeriod] = useState('');
     useEffect(() => {
         if (patientId) {
             axios.get(`http://localhost:3000/user/${patientId}`)
@@ -22,18 +22,23 @@ export default function LabReportForm() {
                     if (data) {
                         document.getElementById('name').innerText = data.name || 'dds';
                         document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
-                    document.getElementById('mrn').innerText = data._id || '';
-                    document.getElementById('collectedOn').innerText = data.collectedOn || '';
-                    document.getElementById('completedOn').innerText = data.completedOn || '';
-                    document.getElementById('dept').innerText = data.admittingDepartment || 'G1 & Hepato-Pancreatico-Biliary Surgery';
-                    document.getElementById('docname').innerText = data.surgeon|| 'Dr Smith Mathew';
-                    document.getElementById('visitType').innerText = data.visitType || 'IP';
-                    document.getElementById('recievedOn').innerText = data.recievedOn || '';
-                    document.getElementById('sampleNo').innerText = data.sampleNo || '';
-                    document.getElementById('testName').innerText = data.testName || 'AEROBIC C & S';
-                    document.getElementById('incubPeriod').innerText = data.incubPeriod || '36-48 hrs';
-                    document.getElementById('remarks').innerText = data.remarks || '';
-                    document.getElementById('comments').innerText = data.comments || '';
+                        document.getElementById('mrn').innerText = data._id || '';
+                        document.getElementById('collectedOn').innerText = new Date(data.admission_date).toISOString().split("T")[0];
+                        document.getElementById('completedOn').innerText = data.discharge_date || '';
+                        document.getElementById('dept').innerText = data.admittingDepartment || 'G1 & Hepato-Pancreatico-Biliary Surgery';
+                        document.getElementById('docname').innerText = data.surgeon || 'Dr Smith Mathew';
+                        document.getElementById('visitType').innerText = data.visitType || 'IP';
+                        document.getElementById('sampleNo').innerText = data.patient_id || '';
+                        document.getElementById('testName').innerText = data.procedure_name || '';
+                        document.getElementById('comments').innerText = data.comments || '';
+                        const inductionDate = new Date(data.induction); // Assuming induction is a date field
+                        const surgeryEndDate = new Date(data.surgeryEnd); // Assuming surgeryEnd is a date field
+
+                        if (inductionDate && surgeryEndDate) {
+                            const diffInMs = surgeryEndDate - inductionDate; // Difference in milliseconds
+                            const diffInHours = diffInMs / (1000 * 60 * 60); // Convert milliseconds to hours
+                            setIncubPeriod(`${Math.round(diffInHours)} hrs`);
+                        }
                     }
                 })
                 .catch((error) => {
@@ -94,14 +99,14 @@ export default function LabReportForm() {
                             <tr>
                                 <td className="border px-4 py-2"><span className="font-bold">MRN:</span></td>
                                 <td className="border px-4 py-2"><span id="mrn">123456789</span></td>
-                                <td className="border px-4 py-2"><span className="font-bold">Specimen Collected On:</span></td>
-                                <td className="border px-4 py-2"><span id="collectedOn">2024-10-01</span></td>
+                                <td className="border px-4 py-2"><span className="font-bold">Diabetic:</span></td>
+                                <td className="border px-4 py-2"><span id="mrn">Yes</span></td>
                             </tr>
                             <tr>
                                 <td className="border px-4 py-2"><span className="font-bold">Visit Type:</span></td>
                                 <td className="border px-4 py-2"><span id="visitType">IP</span></td>
-                                <td className="border px-4 py-2"><span className="font-bold">Specimen Recieved On:</span></td>
-                                <td className="border px-4 py-2"><span id="recievedOn">2024-10-03</span></td>
+                                <td className="border px-4 py-2"><span className="font-bold">Specimen Collected On:</span></td>
+                                <td className="border px-4 py-2"><span id="collectedOn">2024-10-01</span></td>
                             </tr>
                             <tr>
                                 <td className="border px-4 py-2"><span className="font-bold">Sample No:</span></td>
@@ -123,12 +128,12 @@ export default function LabReportForm() {
                             </tr>
                             <tr>
                                 <td className="font-bold">Incubation Period:</td>
-                                <td><span id="incubPeriod">36-48 hrs</span></td>
+                                <td><span id="incubPeriod">{incubPeriod || 'N/A'}</span></td>
                             </tr>
-                            <tr>
+                            {/* <tr>
                                 <td className="font-bold">Remarks:</td>
                                 <td><span id="remarks">Escherichia coli grown in culture. Sample type: Pus swab from Abdomen.</span></td>
-                            </tr>
+                            </tr> */}
                         </tbody>
                     </table>
 
@@ -159,15 +164,14 @@ export default function LabReportForm() {
                         <thead className="bg-gray-400">
                             <tr>
                                 <th className="text-left px-4 py-2 border">Antibiotic</th>
-                                <th className="text-left px-4 py-2 border">MIC</th>
+                          
                                 <th className="text-left px-4 py-2 border">Interpretation</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {['Cefuroxime', 'Ceftriaxone', 'Cefazidime', 'Cefepime', 'Amoxicillin/Clavulanic acid', 'Piperacillin/Tazobactam', 'Cefoperazone/Sulbactam', 'Gentamicin', 'Amikacin', 'Netilmicin', 'Ciprofloxacin', 'Levofloxacin', 'Trimethoprim/Sulfamethoxazole'].map((antibiotic, index) => (
+                            {['Piperacillin/Tazobactam', 'Cefoperazone/Sulbactam', 'Gentamicin', 'Amikacin', 'Netilmicin', 'Ciprofloxacin', 'Levofloxacin', 'Trimethoprim/Sulfamethoxazole'].map((antibiotic, index) => (
                                 <tr key={index}>
                                     <td className="px-4 py-2 border">{antibiotic}</td>
-                                    <td className="px-4 py-2 border"><span id={`mic_${antibiotic}`}>0.5</span></td>
                                     <td className="px-4 py-2 border"><span id={`interpretation_${antibiotic}`}>Susceptible</span></td>
                                 </tr>
                             ))}
