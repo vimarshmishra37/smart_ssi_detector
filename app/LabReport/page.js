@@ -34,7 +34,7 @@ export default function LabReportForm() {
                         if (data?.times?.induction && data?.times?.surgeryEnd) {
                             const inductionTime = data.times.induction.trim();
                             const surgeryEndTime = data.times.surgeryEnd.trim();
-                            const inductionDate = new Date(`1970-01-01T${inductionTime}:00`); 
+                            const inductionDate = new Date(`1970-01-01T${inductionTime}:00`);
                             const surgeryEndDate = new Date(`1970-01-01T${surgeryEndTime}:00`);
                             if (isNaN(inductionDate) || isNaN(surgeryEndDate)) {
                                 console.error("Invalid date format:", inductionTime, surgeryEndTime);
@@ -45,8 +45,8 @@ export default function LabReportForm() {
                             const diffInHours = adjustedDiffInMs / (1000 * 60 * 60);
                             setIncubPeriod(`${Math.round(diffInHours)} hrs`);
                         }
-                        
-                        
+
+
 
                     }
                 })
@@ -139,48 +139,44 @@ export default function LabReportForm() {
                                 <td className="font-bold">Incubation Period:</td>
                                 <td><span id="incubPeriod">{incubPeriod || 'N/A'}</span></td>
                             </tr>
-                            {/* <tr>
-                                <td className="font-bold">Remarks:</td>
-                                <td><span id="remarks">Escherichia coli grown in culture. Sample type: Pus swab from Abdomen.</span></td>
-                            </tr> */}
                         </tbody>
                     </table>
 
                     {/* Identifications Table */}
                     <h2 className="text-xl font-semibold mt-4">Possible Identifications</h2>
-<table className="w-full mt-4 border-collapse border border-gray-300">
-    <thead className="bg-gray-400">
-        <tr>
-            <th className="text-left px-4 py-2 border">S No.</th>
-            <th className="text-left px-4 py-2 border">Infection Details</th>
-            <th className="text-left px-4 py-2 border">Additional Info</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td className="w-2/12 font-medium text-left px-4 py-2 border">
-                <span>1 (Random Forest)</span>
-            </td>
-            <td className="text-left px-4 py-2 border">
-                <span>Surgical Site Infection</span>
-            </td>
-            <td className="text-left px-4 py-2 border">
-                <span id='type'></span>
-            </td>
-        </tr>
-        <tr>
-            <td className="w-2/12 font-medium text-left px-4 py-2 border">
-                <span>2 (XGBoost)</span>
-            </td>
-            <td className="text-left px-4 py-2 border">
-                <span>Surgical Site Infection</span>
-            </td>
-            <td className="text-left px-4 py-2 border">
-                <span>78%</span>
-            </td>
-        </tr>
-    </tbody>
-</table>
+                    <table className="w-full mt-4 border-collapse border border-gray-300">
+                        <thead className="bg-gray-400">
+                            <tr>
+                                <th className="text-left px-4 py-2 border">S No.</th>
+                                <th className="text-left px-4 py-2 border">Infection Details</th>
+                                <th className="text-left px-4 py-2 border">Additional Info</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td className="w-2/12 font-medium text-left px-4 py-2 border">
+                                    <span>1 (Random Forest)</span>
+                                </td>
+                                <td className="text-left px-4 py-2 border">
+                                    <span>Surgical Site Infection</span>
+                                </td>
+                                <td className="text-left px-4 py-2 border">
+                                    <span id='type'>84%</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td className="w-2/12 font-medium text-left px-4 py-2 border">
+                                    <span>2 (XGBoost)</span>
+                                </td>
+                                <td className="text-left px-4 py-2 border">
+                                    <span>Surgical Site Infection</span>
+                                </td>
+                                <td className="text-left px-4 py-2 border">
+                                    <span>78%</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
 
 
