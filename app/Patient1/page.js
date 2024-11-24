@@ -33,7 +33,7 @@ export default function Patient() {
     diabietic: '',
     gender: '',
     dateOfAdmission: '',
-    dateOfProcedure: '',
+    dateOfDischarge: '',
     admittingDepartment: '',
     departmentSurgeon: '',
     procedureName: '',
@@ -322,8 +322,8 @@ export default function Patient() {
                     <label htmlFor="diabetic" className="block text-teal-800 font-semibold mb-2">Diabietic:</label>
                     <select id="diabietic" name="diabietic" value={formData.diabietic} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100">
                       <option value="">-- Choose--</option>
-                      <option value="yes">Yes</option>
-                      <option value="no">No</option>
+                      <option value="Yes">Yes</option>
+                      <option value="No">No</option>
                     </select>
                   </div>
                 </div>
@@ -336,8 +336,8 @@ export default function Patient() {
                   <input type="date" id="dateOfAdmission" name="dateOfAdmission" value={formData.dateOfAdmission} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100" />
                 </div>
                 <div className="w-1/2 pl-2">
-                  <label htmlFor="dateOfProcedure" className="block text-teal-800 font-semibold mb-2">Date of Procedure:</label>
-                  <input type="date" id="dateOfProcedure" name="dateOfProcedure" value={formData.dateOfProcedure} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100 mb-2" />
+                  <label htmlFor="dateOfDischarge" className="block text-teal-800 font-semibold mb-2">Date of Procedure:</label>
+                  <input type="date" id="dateOfDischarge" name="dateOfDischarge" value={formData.dateOfDischarge} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100 mb-2" />
                 </div>
               </div>
 

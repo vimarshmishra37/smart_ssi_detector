@@ -24,35 +24,41 @@ export default function LabReportForm() {
                         document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
                         document.getElementById('mrn').innerText = data._id || '';
                         document.getElementById('collectedOn').innerText = new Date(data.admission_date).toISOString().split("T")[0];
-                        document.getElementById('completedOn').innerText = data.discharge_date || '';
+                        document.getElementById('completedOn').innerText = new Date(data.discharge_date).toISOString().split("T")[0];
                         document.getElementById('dept').innerText = data.admittingDepartment || 'G1 & Hepato-Pancreatico-Biliary Surgery';
                         document.getElementById('docname').innerText = data.surgeon || 'Dr Smith Mathew';
                         document.getElementById('visitType').innerText = data.visitType || 'IP';
                         document.getElementById('sampleNo').innerText = data.patient_id || '';
                         document.getElementById('testName').innerText = data.procedure_name || '';
                         document.getElementById('comments').innerText = data.comments || '';
+                        document.getElementById('diabietic').innerText = data.diabietic || '';
                         console.log(response.data.prediction);
-                        document.getElementById('type').innerText=response.data.prediction.prediction;
-                        const inductionTime = data.induction; 
-                        const surgeryEndTime = data.surgeryEnd; 
+                        document.getElementById('type').innerText = response.data.prediction.prediction;
 
-                        if (inductionTime && surgeryEndTime) {
                         if (data?.times?.induction && data?.times?.surgeryEnd) {
                             const inductionTime = data.times.induction.trim();
                             const surgeryEndTime = data.times.surgeryEnd.trim();
-                            const inductionDate = new Date(`1970-01-01T${inductionTime}:00`);
-                            const surgeryEndDate = new Date(`1970-01-01T${surgeryEndTime}:00`);
-                            if (isNaN(inductionDate) || isNaN(surgeryEndDate)) {
-                                console.error("Invalid date format:", inductionTime, surgeryEndTime);
-                                return;
+
+                            try {
+                                const inductionDate = new Date(`1970-01-01T${inductionTime}:00`);
+                                const surgeryEndDate = new Date(`1970-01-01T${surgeryEndTime}:00`);
+
+                                if (isNaN(inductionDate) || isNaN(surgeryEndDate)) {
+                                    console.error("Invalid date format:", inductionTime, surgeryEndTime);
+                                    return;
+                                }
+
+                                const diffInMs = surgeryEndDate - inductionDate;
+                                const adjustedDiffInMs = diffInMs >= 0 ? diffInMs : diffInMs + 24 * 60 * 60 * 1000;
+                                const diffInHours = adjustedDiffInMs / (1000 * 60 * 60);
+
+                                setIncubPeriod(`${Math.round(diffInHours)} hrs`);
+                            } catch (error) {
+                                console.error("Error in calculation:", error);
                             }
-                            const diffInMs = surgeryEndDate - inductionDate;
-                            const adjustedDiffInMs = diffInMs >= 0 ? diffInMs : diffInMs + 24 * 60 * 60 * 1000;
-                            const diffInHours = adjustedDiffInMs / (1000 * 60 * 60);
-                            setIncubPeriod(`${Math.round(diffInHours)} hrs`);
+                        } else {
+                            console.error("Missing or invalid times:", data?.times);
                         }
-
-
 
                     }
                 })
@@ -63,9 +69,9 @@ export default function LabReportForm() {
     }, [patientId, setValue]);
 
 
+
     const onSubmit = (data) => {
         console.log('Form submitted with:', data);
-        // Optionally, send data to the backend
     };
 
     const generatePDF = () => {
@@ -115,19 +121,19 @@ export default function LabReportForm() {
                                 <td className="border px-4 py-2"><span className="font-bold">MRN:</span></td>
                                 <td className="border px-4 py-2"><span id="mrn">123456789</span></td>
                                 <td className="border px-4 py-2"><span className="font-bold">Diabetic:</span></td>
-                                <td className="border px-4 py-2"><span id="mrn">Yes</span></td>
+                                <td className="border px-4 py-2"><span id="diabietic">Yes</span></td>
                             </tr>
                             <tr>
                                 <td className="border px-4 py-2"><span className="font-bold">Visit Type:</span></td>
                                 <td className="border px-4 py-2"><span id="visitType">IP</span></td>
                                 <td className="border px-4 py-2"><span className="font-bold">Specimen Collected On:</span></td>
-                                <td className="border px-4 py-2"><span id="collectedOn">2024-10-01</span></td>
+                                <td className="border px-4 py-2"><span id="collectedOn">---</span></td>
                             </tr>
                             <tr>
                                 <td className="border px-4 py-2"><span className="font-bold">Sample No:</span></td>
                                 <td className="border px-4 py-2"><span id="sampleNo">32112</span></td>
                                 <td className="border px-4 py-2"><span className="font-bold">Specimen Completed On:</span></td>
-                                <td className="border px-4 py-2"><span id="completedOn">2024-10-05</span></td>
+                                <td className="border px-4 py-2"><span id="completedOn">---</span></td>
                             </tr>
                         </tbody>
                     </table>
@@ -167,7 +173,7 @@ export default function LabReportForm() {
                                     <span>Surgical Site Infection</span>
                                 </td>
                                 <td className="text-left px-4 py-2 border">
-                                    <span id='type'>84%</span>
+                                    <span id='type'>---</span>
                                 </td>
                             </tr>
                             <tr>
@@ -178,7 +184,7 @@ export default function LabReportForm() {
                                     <span>Surgical Site Infection</span>
                                 </td>
                                 <td className="text-left px-4 py-2 border">
-                                    <span>78%</span>
+                                    <span>---</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -197,12 +203,17 @@ export default function LabReportForm() {
                             </tr>
                         </thead>
                         <tbody>
-                            {['Piperacillin/Tazobactam', 'Cefoperazone/Sulbactam', 'Gentamicin', 'Amikacin', 'Netilmicin', 'Ciprofloxacin', 'Levofloxacin', 'Trimethoprim/Sulfamethoxazole'].map((antibiotic, index) => (
+                            {['Gentamicin', 'Amikacin', 'Netilmicin', 'Ciprofloxacin', 'Levofloxacin', 'Trimethoprim/Sulfamethoxazole'].map((antibiotic, index) => (
                                 <tr key={index}>
                                     <td className="px-4 py-2 border">{antibiotic}</td>
-                                    <td className="px-4 py-2 border"><span id={`interpretation_${antibiotic}`}>Susceptible</span></td>
+                                    <td className="px-4 py-2 border">
+                                        <span id={`interpretation_${antibiotic}`}>
+                                            {['Sensitive', 'Resistant', 'Intermediate', 'Sensitive', 'Resistant', 'Intermediate'][index]}
+                                        </span>
+                                    </td>
                                 </tr>
                             ))}
+
                         </tbody>
                     </table>
 
