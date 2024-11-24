@@ -24,14 +24,19 @@ export default function LabReportForm() {
                         document.getElementById('ageSex').innerText = `${data.age}/${data.gender}` || '';
                         document.getElementById('mrn').innerText = data._id || '';
                         document.getElementById('collectedOn').innerText = new Date(data.admission_date).toISOString().split("T")[0];
-                        document.getElementById('completedOn').innerText = new Date(data.discharge_date).toISOString().split("T")[0];
+                        document.getElementById('completedOn').innerText = data.discharge_date || '';
                         document.getElementById('dept').innerText = data.admittingDepartment || 'G1 & Hepato-Pancreatico-Biliary Surgery';
                         document.getElementById('docname').innerText = data.surgeon || 'Dr Smith Mathew';
                         document.getElementById('visitType').innerText = data.visitType || 'IP';
                         document.getElementById('sampleNo').innerText = data.patient_id || '';
                         document.getElementById('testName').innerText = data.procedure_name || '';
                         document.getElementById('comments').innerText = data.comments || '';
-                        document.getElementById('diabetic').innerText = data.diabietic || '';
+                        console.log(response.data.prediction);
+                        document.getElementById('type').innerText=response.data.prediction.prediction;
+                        const inductionTime = data.induction; 
+                        const surgeryEndTime = data.surgeryEnd; 
+
+                        if (inductionTime && surgeryEndTime) {
                         if (data?.times?.induction && data?.times?.surgeryEnd) {
                             const inductionTime = data.times.induction.trim();
                             const surgeryEndTime = data.times.surgeryEnd.trim();
@@ -65,78 +70,20 @@ export default function LabReportForm() {
 
     const generatePDF = () => {
         const doc = new jsPDF();
-    
-        // Title
+
+        // Generate the PDF content
         doc.setFontSize(18);
         doc.text('Department of Laboratory Medicine - Microbiology', 14, 20);
-    
-        // Patient Information Section
+
         doc.setFontSize(14);
         doc.text('Patient Information', 14, 30);
-        const patientInfo = [
-            `Name: ${document.getElementById('name').innerText || ''}`,
-            `Age/Sex: ${document.getElementById('ageSex').innerText || ''}`,
-            `MRN: ${document.getElementById('mrn').innerText || ''}`,
-            `Department: ${document.getElementById('dept').innerText || ''}`,
-            `Consulting Doctor: ${document.getElementById('docname').innerText || ''}`,
-            `Visit Type: ${document.getElementById('visitType').innerText || ''}`,
-            `Diabetic: ${document.getElementById('diabetic').innerText || ''}`,
-            `Specimen Collected On: ${document.getElementById('collectedOn').innerText || ''}`,
-            `Specimen Completed On: ${document.getElementById('completedOn').innerText || ''}`,
-        ];
-        patientInfo.forEach((info, index) => {
-            doc.text(info, 14, 40 + index * 10);
-        });
-    
-        // Test and Sample Information Section
-        doc.text('Test and Sample Information', 14, 150);
-        doc.text(`Test Name: ${document.getElementById('testName').innerText || ''}`, 14, 160);
-        doc.text(`Incubation Period: ${document.getElementById('incubPeriod').innerText || 'N/A'}`, 14, 170);
-    
-        // Possible Identifications Section
-        doc.text('Possible Identifications', 14, 190);
-        const identifications = [
-            {
-                method: '1 (Random Forest)',
-                details: 'Surgical Site Infection',
-                info: document.getElementById('type')?.innerText || 'N/A',
-            },
-            {
-                method: '2 (XGBoost)',
-                details: 'Surgical Site Infection',
-                info: '78%',
-            },
-        ];
-        identifications.forEach((id, idx) => {
-            doc.text(`${id.method}: ${id.details} (${id.info})`, 14, 200 + idx * 10);
-        });
-    
-        // Antibiotic Susceptibility Section
-        doc.text('Antibiotic Susceptibility', 14, 230);
-        const antibiotics = [
-            'Piperacillin/Tazobactam',
-            'Cefoperazone/Sulbactam',
-            'Gentamicin',
-            'Amikacin',
-            'Netilmicin',
-            'Ciprofloxacin',
-            'Levofloxacin',
-            'Trimethoprim/Sulfamethoxazole',
-        ];
-        antibiotics.forEach((antibiotic, index) => {
-            const interpretation = document.getElementById(`interpretation_${antibiotic}`)?.innerText || 'N/A';
-            doc.text(`${antibiotic}: ${interpretation}`, 14, 240 + index * 10);
-        });
-    
-        // Comments Section
-        doc.text('Comments:', 14, 320);
-        const comments = document.getElementById('comments')?.value || 'No comments provided.';
-        doc.text(comments, 14, 330, { maxWidth: 180 });
-    
-        // Save the PDF
+        doc.text(`Name: ${document.getElementById('name').innerText}`, 14, 40);
+        doc.text(`Age/Sex: ${document.getElementById('ageSex').innerText}`, 14, 50);
+        doc.text(`MRN: ${document.getElementById('mrn').innerText}`, 14, 60);
+
+        // Add other PDF sections as required
         doc.save('LabReport.pdf');
     };
-    
 
     const handleFormSubmit = () => {
         router.push('/Dashboard'); // Adjust route as necessary
@@ -168,7 +115,7 @@ export default function LabReportForm() {
                                 <td className="border px-4 py-2"><span className="font-bold">MRN:</span></td>
                                 <td className="border px-4 py-2"><span id="mrn">123456789</span></td>
                                 <td className="border px-4 py-2"><span className="font-bold">Diabetic:</span></td>
-                                <td className="border px-4 py-2"><span id="diabetic">Yes</span></td>
+                                <td className="border px-4 py-2"><span id="mrn">Yes</span></td>
                             </tr>
                             <tr>
                                 <td className="border px-4 py-2"><span className="font-bold">Visit Type:</span></td>
