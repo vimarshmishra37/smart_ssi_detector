@@ -30,6 +30,7 @@ export default function Patient() {
     height: '',
     weight: '',
     bmi: '',
+    diabietic: '',
     gender: '',
     dateOfAdmission: '',
     dateOfProcedure: '',
@@ -172,6 +173,7 @@ export default function Patient() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
     setFormData({
       ...formData,
       [name]: value,
@@ -195,7 +197,7 @@ export default function Patient() {
     e.preventDefault();
 
     try {
-      console.log("Request Body:", formData);
+      console.log("Request Body: 1", formData);
       const response = await fetch('http://localhost:3000/general', {
         method: 'POST',
         headers: {
@@ -205,6 +207,7 @@ export default function Patient() {
           name: formData.patientName,
           age: formData.age,
           email: formData.email,
+          diabietic: formData.diabietic,  
           height: height,
           weight: weight,
           bmi: bmi,
@@ -316,8 +319,8 @@ export default function Patient() {
                 </div>
                 <div className="w-1/2 pl-2">
                   <div className="mb-4">
-                    <label htmlFor="diabetic" className="block text-teal-800 font-semibold mb-2">Diabetic:</label>
-                    <select id="diabetic" name="diabetic" className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100">
+                    <label htmlFor="diabetic" className="block text-teal-800 font-semibold mb-2">Diabietic:</label>
+                    <select id="diabietic" name="diabietic" value={formData.diabietic} onChange={handleChange} className="w-full border border-teal-800 rounded-md p-2 h-12 bg-emerald-100">
                       <option value="">-- Choose--</option>
                       <option value="yes">Yes</option>
                       <option value="no">No</option>

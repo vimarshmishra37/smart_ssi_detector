@@ -31,6 +31,7 @@ export default function LabReportForm() {
                         document.getElementById('sampleNo').innerText = data.patient_id || '';
                         document.getElementById('testName').innerText = data.procedure_name || '';
                         document.getElementById('comments').innerText = data.comments || '';
+                        document.getElementById('type').innerText = response.data.prediction.prediction || '';
                         const inductionDate = new Date(data.induction); // Assuming induction is a date field
                         const surgeryEndDate = new Date(data.surgeryEnd); // Assuming surgeryEnd is a date field
 
@@ -139,24 +140,41 @@ export default function LabReportForm() {
 
                     {/* Identifications Table */}
                     <h2 className="text-xl font-semibold mt-4">Possible Identifications</h2>
-                    <table className="w-full mt-4 border-collapse border border-gray-300">
-                        <thead className="bg-gray-400">
-                            <tr>
-                                <th className="text-left px-4 py-2 border">S No.</th>
-                                <th className="text-left px-4 py-2 border">Infection Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td className="w-2/12 font-medium text-left px-4 py-2 border"><span>1(Random Forest)</span></td>
-                                <td className="text-left px-4 py-2 border"><span>Surgical Site Infection</span></td>
-                            </tr>
-                            <tr>
-                                <td className="w-2/12 font-medium text-left px-4 py-2 border"><span>2(XGboost)</span></td>
-                                <td className="text-left px-4 py-2 border"><span>Surgical Site Infection</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+<table className="w-full mt-4 border-collapse border border-gray-300">
+    <thead className="bg-gray-400">
+        <tr>
+            <th className="text-left px-4 py-2 border">S No.</th>
+            <th className="text-left px-4 py-2 border">Infection Details</th>
+            <th className="text-left px-4 py-2 border">Additional Info</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td className="w-2/12 font-medium text-left px-4 py-2 border">
+                <span>1 (Random Forest)</span>
+            </td>
+            <td className="text-left px-4 py-2 border">
+                <span>Surgical Site Infection</span>
+            </td>
+            <td className="text-left px-4 py-2 border">
+                <span id='type'></span>
+            </td>
+        </tr>
+        <tr>
+            <td className="w-2/12 font-medium text-left px-4 py-2 border">
+                <span>2 (XGBoost)</span>
+            </td>
+            <td className="text-left px-4 py-2 border">
+                <span>Surgical Site Infection</span>
+            </td>
+            <td className="text-left px-4 py-2 border">
+                <span>78%</span>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
 
                     {/* Antibiotic Susceptibility Table */}
                     <h2 className="text-xl font-semibold mt-4">Antibiotic Susceptibility</h2>

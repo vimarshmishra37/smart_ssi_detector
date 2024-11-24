@@ -35,6 +35,7 @@ export default function AntibioticSurveillanceForm() {
 
   // Handle form input changes
   const handleChange = (e, index, section) => {
+    console.log(e.target.name, e.target.value);
     const { name, value } = e.target;
     const newSection = [...formData[section]];
     newSection[index][name] = value;
@@ -52,7 +53,7 @@ export default function AntibioticSurveillanceForm() {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+console.log("Request Body: 3", formData);
     // Send formData to the backend using a POST request
     try {
       const response = await fetch("http://localhost:3000/patient", {
@@ -365,4 +366,5 @@ export default function AntibioticSurveillanceForm() {
     </Suspense>
   );
 }
+
 
