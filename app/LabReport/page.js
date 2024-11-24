@@ -31,15 +31,18 @@ export default function LabReportForm() {
                         document.getElementById('sampleNo').innerText = data.patient_id || '';
                         document.getElementById('testName').innerText = data.procedure_name || '';
                         document.getElementById('comments').innerText = data.comments || '';
-                        document.getElementById('type').innerText = response.data.prediction.prediction || '';
-                        const inductionDate = new Date(data.induction); // Assuming induction is a date field
-                        const surgeryEndDate = new Date(data.surgeryEnd); // Assuming surgeryEnd is a date field
+                        const inductionTime = data.induction; 
+                        const surgeryEndTime = data.surgeryEnd; 
 
-                        if (inductionDate && surgeryEndDate) {
-                            const diffInMs = surgeryEndDate - inductionDate; // Difference in milliseconds
-                            const diffInHours = diffInMs / (1000 * 60 * 60); // Convert milliseconds to hours
+                        if (inductionTime && surgeryEndTime) {
+                            const inductionDate = new Date(`1970-01-01T${inductionTime}:00`);
+                            const surgeryEndDate = new Date(`1970-01-01T${surgeryEndTime}:00`);
+                            const diffInMs = surgeryEndDate - inductionDate;
+                            const adjustedDiffInMs = diffInMs >= 0 ? diffInMs : diffInMs + 24 * 60 * 60 * 1000;
+                            const diffInHours = adjustedDiffInMs / (1000 * 60 * 60);
                             setIncubPeriod(`${Math.round(diffInHours)} hrs`);
                         }
+
                     }
                 })
                 .catch((error) => {
@@ -182,7 +185,7 @@ export default function LabReportForm() {
                         <thead className="bg-gray-400">
                             <tr>
                                 <th className="text-left px-4 py-2 border">Antibiotic</th>
-                          
+
                                 <th className="text-left px-4 py-2 border">Interpretation</th>
                             </tr>
                         </thead>
