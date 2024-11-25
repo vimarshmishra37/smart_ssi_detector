@@ -76,20 +76,66 @@ export default function LabReportForm() {
 
     const generatePDF = () => {
         const doc = new jsPDF();
-
-        // Generate the PDF content
+    
+        // Set title
         doc.setFontSize(18);
         doc.text('Department of Laboratory Medicine - Microbiology', 14, 20);
-
+    
+        // Add Patient Information
         doc.setFontSize(14);
-        doc.text('Patient Information', 14, 30);
-        doc.text(`Name: ${document.getElementById('name').innerText}`, 14, 40);
-        doc.text(`Age/Sex: ${document.getElementById('ageSex').innerText}`, 14, 50);
-        doc.text(`MRN: ${document.getElementById('mrn').innerText}`, 14, 60);
-
-        // Add other PDF sections as required
+        doc.text('Patient Information:', 14, 30);
+        doc.text(`Name: ${document.getElementById('name').innerText || '---'}`, 14, 40);
+        doc.text(`Age/Sex: ${document.getElementById('ageSex').innerText || '---'}`, 14, 50);
+        doc.text(`MRN: ${document.getElementById('mrn').innerText || '---'}`, 14, 60);
+        doc.text(`Department: ${document.getElementById('dept').innerText || '---'}`, 14, 70);
+        doc.text(`Consulting Doctor: ${document.getElementById('docname').innerText || '---'}`, 14, 80);
+        doc.text(`Diabetic: ${document.getElementById('diabietic').innerText || '---'}`, 14, 90);
+        doc.text(`Visit Type: ${document.getElementById('visitType').innerText || '---'}`, 14, 100);
+        doc.text(`Specimen Collected On: ${document.getElementById('collectedOn').innerText || '---'}`, 14, 110);
+        doc.text(`Specimen Completed On: ${document.getElementById('completedOn').innerText || '---'}`, 14, 120);
+        doc.text(`Sample No: ${document.getElementById('sampleNo').innerText || '---'}`, 14, 130);
+    
+        // Add Test and Sample Information
+        doc.text('Test and Sample Information:', 14, 150);
+        doc.text(`Test Name: ${document.getElementById('testName').innerText || '---'}`, 14, 160);
+        doc.text(`Incubation Period: ${document.getElementById('incubPeriod').innerText || '---'}`, 14, 170);
+    
+        // Add Identifications
+        doc.text('Possible Identifications:', 14, 190);
+        const identifications = [
+            { model: 'Random Forest', type: document.getElementById('type').innerText || '---' },
+            { model: 'XGBoost', type: '---' } // Placeholder for example
+        ];
+    
+        identifications.forEach((id, index) => {
+            doc.text(`${index + 1}. Model: ${id.model}, Type: ${id.type}`, 14, 200 + index * 10);
+        });
+    
+        // Add Antibiotic Susceptibility
+        doc.text('Antibiotic Susceptibility:', 14, 230);
+        const antibiotics = [
+            'Gentamicin', 
+            'Amikacin', 
+            'Netilmicin', 
+            'Ciprofloxacin', 
+            'Levofloxacin', 
+            'Trimethoprim/Sulfamethoxazole'
+        ];
+    
+        antibiotics.forEach((antibiotic, index) => {
+            const interpretation = document.getElementById(`interpretation_${antibiotic}`).innerText || '---';
+            doc.text(`${antibiotic}: ${interpretation}`, 14, 240 + index * 10);
+        });
+    
+        // Add Comments
+        const comments = document.getElementById('comments').value || '---';
+        doc.text('Comments:', 14, 300);
+        doc.text(comments, 14, 310);
+    
+        // Save the PDF
         doc.save('LabReport.pdf');
     };
+    
 
     const handleFormSubmit = () => {
         router.push('/Dashboard'); // Adjust route as necessary
