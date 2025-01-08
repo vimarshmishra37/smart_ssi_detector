@@ -6,6 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import axios from 'axios';
 
 export default function LabReportForm() {
+    
     const searchParams = useSearchParams();
     const patientId = searchParams.get('patientID');
     const router = useRouter();
@@ -94,7 +95,7 @@ export default function LabReportForm() {
     const handleFormSubmit = () => {
         router.push('/Dashboard'); // Adjust route as necessary
     };
-
+<Suspense fallback={<div>Loading...</div>}>
     return (
         <div className='bg-teal-100 text-teal-800'>
             <div className="w-3/4 mx-auto bg-gray-100 p-6 rounded-lg shadow-md">
@@ -246,4 +247,5 @@ export default function LabReportForm() {
             </div>
         </div>
     );
+    </Suspense>
 }
