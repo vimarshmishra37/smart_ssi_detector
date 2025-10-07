@@ -1,3 +1,5 @@
+Other repository of this project are https://github.com/vimarshmishra37/ssi_backend https://github.com/vimarshmishra37/ml_model
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
